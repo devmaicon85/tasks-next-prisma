@@ -7,7 +7,7 @@ export default class MyDocument extends Document {
                 <Head>
                     <link
                         rel="shortcut icon"
-                        href="favicon.png"
+                        href="/assets/logo.png"
                         type="image/png"
                     />
                     <link
