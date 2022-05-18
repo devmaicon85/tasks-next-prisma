@@ -1,21 +1,23 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
+import { getSession } from "next-auth/react";
+import { getAllTasks } from "../../../lib/dbPrisma/tasks";
+import getUserAuthenticated from "../users/getUserAuthenticated";
 
-async function create(req: NextApiRequest, res: NextApiResponse) {
-    const { title } = req.body;
-
+async function index(req: NextApiRequest, res: NextApiResponse) {
+    // busca tasks somente do usuario autenticado
     const { method } = req;
 
     if (method === "GET") {
-        const task = await prisma.task.create({
-            data: {
-                title,
-                isDone: false,
-            },
-        });
-        return res.status(200).json(task);
+        try {
+            const { id: userId } = await getUserAuthenticated(req);
+            const task = await getAllTasks(userId);
+            return res.status(200).json(task);
+        } catch (error) {
+            return res.status(500).json(error);
+        }
     }
 
-    res.status(404).json({ message: "Página não encontrada" });
+    res.setHeader("Allow", "GET");
+    res.status(405).end("Method not allowed");
 }
-export default create;
+export default index;

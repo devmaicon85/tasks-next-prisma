@@ -1,23 +1,61 @@
 import { GetServerSideProps } from "next";
+import { getSession, signOut } from "next-auth/react";
 import React, { ReactEventHandler, useState } from "react";
 import axios from "../../lib/axios";
-import { getAllTasks, TaskCreateType } from "../../lib/db/tasks";
+import { getAllTasks, TaskCreateType } from "../../lib/dbPrisma/tasks";
+import { getUserByEmail, UserCreateType } from "../../lib/dbPrisma/users";
 
-export const getServerSideProps: GetServerSideProps = async () => {
-    let tasks = await getAllTasks();
+export const getServerSideProps: GetServerSideProps = async ({
+    req,
+    params,
+}) => {
+    const session = await getSession({ req });
+    // const { slug } = params;
+
+    // se nao tiver sessao volta para login
+
+    console.log("dashboard:session::", session);
+
+    if (!session?.user?.email) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
+
+    // sessao só tem o email do usuario
+    const user = await getUserByEmail(session.user.email);
+
+    console.log("dashboard::getUserByEmail::", user);
+
+    if (!user) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
+
+    // const { id: userId } = await getUserAuthenticated();
+    let tasks = await getAllTasks(user.id);
 
     return {
         props: {
             tasks: JSON.parse(JSON.stringify(tasks)),
+            user: JSON.parse(JSON.stringify(user)),
         },
     };
 };
 
-interface PostProps {
+interface TaskProps {
     tasks: TaskCreateType[];
+    user: UserCreateType;
 }
 
-export default function App({ tasks }: PostProps) {
+export default function App({ tasks, user }: TaskProps) {
     const [title, setTitle] = useState("");
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -30,7 +68,9 @@ export default function App({ tasks }: PostProps) {
     return (
         <div className="h-screen bg-gray-500">
             <nav className="flex justify-center p-4 bg-gray-600">
-                <h1 className="text-white text-2xl font-bold">TAREFAS</h1>
+                <h1 className="text-white text-2xl font-bold">
+                    BEM VINDO {user?.email}
+                </h1>
             </nav>
             <div>
                 <form

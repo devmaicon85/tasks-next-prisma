@@ -1,13 +1,19 @@
 import { GetServerSideProps } from "next";
-import { getSession, signIn, useSession } from "next-auth/react";
+import { getSession, signIn, useSession, signOut } from "next-auth/react";
+import { useEffect } from "react";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req });
 
-    if (session) {
+    if (!session) {
+        console.log("index:: user sem sessão.");
+    } else if (session) {
+        console.log("index:: user ja logado, direcionado para dashboard...");
+
         return {
+            // se tiver entra no app antes de aparecer tela pro usuario
             redirect: {
-                destination: "/app",
+                destination: "/dashboard",
                 permanent: false,
             },
         };
@@ -19,7 +25,26 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 };
 
 export default function SignIn() {
-    const { data, status } = useSession();
+    const { data: session, status } = useSession();
+
+    // if (session) {
+    //     return (
+    //         <>
+    //             Signed in as {session?.user?.email} <br />
+    //             <button onClick={() => signOut()}>Sign out</button>
+    //         </>
+    //     );
+    // }
+    // return (
+    //         <button onClick={() => signIn()}>Sign in</button>
+    // );
+
+    // const { accessToken }: any = session;
+
+    console.log("session::", session);
+    console.log("status::", status);
+    // console.log("accessToken::", accessToken);
+
     function SignInGitHub() {
         signIn("github");
     }

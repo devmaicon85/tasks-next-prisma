@@ -1,7 +1,9 @@
+import { Task } from "@prisma/client";
 import prisma from "../prisma";
 
 export interface TaskCreateType {
     title: string;
+    userId: string;
 }
 
 export interface TaskEditType {
@@ -10,16 +12,16 @@ export interface TaskEditType {
     isDone: boolean;
 }
 
-export async function getAllTasks() {
-    const data = await prisma.task.findMany();
+export async function getAllTasks(userId: string) {
+    const data = await prisma.task.findMany({ where: { userId } });
     return data;
 }
 
-export async function createTask({ title }: TaskCreateType) {
+export async function createTask({ title, userId }: TaskCreateType) {
     const data = await prisma.task.create({
         data: {
             title,
-            isDone: false,
+            userId,
         },
     });
 
