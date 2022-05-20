@@ -7,6 +7,8 @@ import { Task } from "@prisma/client";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
+import Header from "@/components/Header";
+import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps = async ({
     req,
@@ -119,24 +121,10 @@ export default function App() {
                 }}
             />
 
+            <Header />
+
             <div className="flex flex-col h-full w-screen ">
-                <nav className="flex z-10 fixed w-full justify-center p-4 bg-gray-600">
-                    <div className="text-white  flex gap-4 justify-center items-center">
-                        {session?.user?.image && (
-                            <Image
-                                src={session.user?.image!}
-                                alt="avatar"
-                                width={50}
-                                height={50}
-                                className="rounded-full"
-                            />
-                        )}
-                        <span className="text-base">
-                            {session?.user?.email}
-                        </span>
-                    </div>
-                </nav>
-                <div className="max-w-4xl mx-auto w-screen mt-32 ">
+                <div className="max-w-4xl p-4 mx-auto w-screen mt-32 ">
                     <label
                         htmlFor="default-task-input"
                         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300"
@@ -147,6 +135,7 @@ export default function App() {
                         {/* <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                                 <FcPlus className="text-xl" />
                             </div> */}
+
                         <form onSubmit={handleSubmit}>
                             <textarea
                                 rows={4}
@@ -180,7 +169,20 @@ export default function App() {
                                         className="block p-4 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                                     ></textarea>
 
-                                    <div className=" flex justify-end mb-6 p-4 space-x-2 text-slate-400 text-base ">
+                                    <div className=" flex justify-between mb-6 p-4 space-x-2 text-slate-400 text-base ">
+                                        <span className="text-xs">
+                                            {task.createdAt &&
+                                                new Intl.DateTimeFormat(
+                                                    "pt-BR",
+                                                    {
+                                                        dateStyle: "full",
+                                                        timeStyle: "short",
+                                                    }
+                                                ).format(
+                                                    new Date(task.createdAt)
+                                                )}
+                                        </span>
+
                                         {/* <button
                                             className={`hover:scale-110 hover:cursor-pointer hover:text-green-700`}
                                             onClick={() =>
