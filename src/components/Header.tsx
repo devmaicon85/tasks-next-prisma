@@ -16,7 +16,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
-    const { data } = useSession();
+    const { data: session } = useSession();
 
     function Logoff() {
         signOut({ redirect: true });
@@ -101,10 +101,10 @@ export default function Header() {
                                             <span className="sr-only">
                                                 Open user menu
                                             </span>
-                                            {data?.user?.image && (
+                                            {session?.user?.image && (
                                                 <Image
                                                     className="rounded-full"
-                                                    src={data?.user?.image}
+                                                    src={session?.user?.image}
                                                     alt="Usuário"
                                                     width={40}
                                                     height={40}
@@ -133,7 +133,8 @@ export default function Header() {
                                                             "block px-4 py-2 text-sm text-gray-700"
                                                         )}
                                                     >
-                                                        Meu Perfil
+                                                        Meu Perfil (
+                                                        {session?.user.email})
                                                     </a>
                                                 )}
                                             </Menu.Item>
