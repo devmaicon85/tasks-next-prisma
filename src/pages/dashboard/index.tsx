@@ -2,11 +2,11 @@ import { GetServerSideProps } from "next";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { FaTrash } from "react-icons/Fa";
 import axios from "../../lib/axios";
 import { Task } from "@prisma/client";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
+import { FaTrash } from "react-icons/fa";
 
 export const getServerSideProps: GetServerSideProps = async ({
     req,
