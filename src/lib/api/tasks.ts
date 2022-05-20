@@ -10,9 +10,20 @@ export async function getAllTasks(
     session: Session
 ) {
     try {
+        const { search } = req.query;
+
+        if (Array.isArray(search)) {
+            return res.status(400).end("Título inválido");
+        }
+
         const data = await prismaClient.task.findMany({
-            where: { userId: session.user.id },
-            orderBy: { createdAt: "asc" },
+            where: {
+                userId: session.user.id,
+                title: {
+                    contains: search,
+                },
+            },
+            orderBy: { createdAt: "desc" },
         });
         return res.status(200).json(data);
     } catch (error) {
@@ -56,7 +67,7 @@ export async function deleteTask(
     const { id } = req.query;
 
     if (Array.isArray(id)) {
-        return res.status(400).end("Id não enviado");
+        return res.status(400).end("Id inválido");
     }
 
     try {
@@ -73,7 +84,7 @@ export async function deleteTask(
                 .end("Tarefa não encontrada para o usuário logado");
         }
 
-        const response = await prismaClient.task.delete({
+        await prismaClient.task.delete({
             where: {
                 id,
             },
@@ -95,7 +106,6 @@ export async function updateTask(
 
     const { task } = req.body;
 
-    console.log("-----------------------------", task.title);
     if (Array.isArray(id)) {
         return res.status(400).end("Id não enviado");
     }

@@ -6,13 +6,7 @@ export default function Button({ children, ...rest }: ButtonProps) {
     return (
         <button
             {...rest}
-            className="
-            flex px-5 justify-center items-center  
-            bg-blue-600 hover:bg-blue-700 
-            focus:ring-blue-500 focus:ring-offset-blue-200 
-            text-white transition ease-in duration-200 text-center text-base 
-            font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg 
-        "
+            className="text-white flex-1 hover:scale-105 right-0 absolute mt-3 bg-green-700 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
         >
             {children}
         </button>

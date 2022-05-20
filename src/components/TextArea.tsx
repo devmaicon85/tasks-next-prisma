@@ -1,8 +1,8 @@
-export interface Props extends React.ComponentPropsWithoutRef<"input"> {}
+export interface Props extends React.ComponentPropsWithoutRef<"textarea"> {}
 
-export default function Input({ className, ...rest }: Props) {
+export default function TextArea({ className, ...rest }: Props) {
     return (
-        <input
+        <textarea
             className={`
                 outline-none
                 block 
@@ -13,9 +13,9 @@ export default function Input({ className, ...rest }: Props) {
                 bg-gray-50 
                 rounded-lg 
                 border
-                border-gray-300 
-                hover:border-green-500
                 placeholder:opacity-70
+                border-gray-300 
+                hover:border-green-500 
                 focus:ring-green-500 
                 focus:border-green-500 
                 dark:bg-gray-700 
@@ -27,6 +27,6 @@ export default function Input({ className, ...rest }: Props) {
                 ${className}
             `}
             {...rest}
-        />
+        ></textarea>
     );
 }

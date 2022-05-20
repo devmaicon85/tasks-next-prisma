@@ -6,9 +6,15 @@ import axios from "../../lib/axios";
 import { Task } from "@prisma/client";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
-import { FaTrash } from "react-icons/fa";
+import { FaSearch, FaTrash } from "react-icons/fa";
 import Header from "@/components/Header";
 import Link from "next/link";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
+import TextArea from "@/components/TextArea";
+import { SearchCircleIcon } from "@heroicons/react/outline";
+import { MdOutlineManageSearch } from "react-icons/md";
+import InputButton from "@/components/InputButton";
 
 export const getServerSideProps: GetServerSideProps = async ({
     req,
@@ -32,34 +38,44 @@ export const getServerSideProps: GetServerSideProps = async ({
 
 export default function App() {
     const [title, setTitle] = useState("");
+    const [searchTitle, setSearchTitle] = useState("");
 
     const { data: session } = useSession();
 
     const [deleting, setDeleting] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [searching, setSearching] = useState(false);
 
     const [tasks, setTasks] = useState<Task[]>([]);
 
     const router = useRouter();
 
-    async function getTasks() {
+    useEffect(() => {
+        return () => {
+            getSearchTasks();
+        };
+    }, []);
+
+    async function getSearchTasks() {
         try {
-            const response = await axios.get("/tasks");
+            const response = await axios.get(`/tasks?search=${searchTitle}`);
             setTasks(response.data);
         } catch (error) {
             console.error(error);
         }
     }
 
-    useEffect(() => {
-        getTasks();
-    }, []);
-
-    // useEffect(() => {
-    //     if (session?.error === "RefreshAccessTokenError") {
-    //         signIn(); // Forçar login para resolver o erro
-    //     }
-    // }, [session]);
+    async function handleSearchSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        setSearching(true);
+        try {
+            await getSearchTasks();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSearching(false);
+        }
+    }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -71,7 +87,7 @@ export default function App() {
             });
 
             if (response) {
-                getTasks();
+                getSearchTasks();
                 toast.success(`Tarefa foi salva com sucesso`);
                 setTitle("");
             }
@@ -86,7 +102,7 @@ export default function App() {
         try {
             const response = await axios.delete(`/tasks?id=${id}`);
             if (response) {
-                getTasks();
+                getSearchTasks();
                 toast.success(`Tarefa foi deletada com sucesso`);
             }
         } catch (error) {
@@ -103,7 +119,7 @@ export default function App() {
                 task,
             });
             if (response) {
-                getTasks();
+                getSearchTasks();
                 toast.success(`Tarefa foi alterada com sucesso`);
             }
         } catch (error) {
@@ -131,29 +147,14 @@ export default function App() {
                     >
                         Salvar Tarefa
                     </label>
-                    <div className="relative mb-16">
-                        {/* <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <FcPlus className="text-xl" />
-                            </div> */}
 
-                        <form onSubmit={handleSubmit}>
-                            <textarea
-                                rows={4}
-                                id="default-task-input"
-                                className="block p-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
-                                required
-                                placeholder="descreva aqui a tarefa a ser realizada..."
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                            ></textarea>
-                            <button
-                                type="submit"
-                                className="text-white flex-1 hover:scale-105 right-0 absolute mt-3 bg-green-700 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                            >
-                                Salvar Tarefa
-                            </button>
-                        </form>
-                    </div>
+                    <form className="mb-5" onSubmit={handleSearchSubmit}>
+                        <InputButton
+                            titleButton="Buscar"
+                            placeholder="Buscar Tarefas"
+                            onChange={(e) => setSearchTitle(e.target.value)}
+                        />
+                    </form>
 
                     {tasks &&
                         tasks.map((task, index) => (
@@ -208,6 +209,20 @@ export default function App() {
                                 </div>
                             </div>
                         ))}
+
+                    <div className="relative mb-16">
+                        <form onSubmit={handleSubmit}>
+                            <TextArea
+                                rows={4}
+                                required
+                                placeholder="digite aqui uma nova tarefa para hoje.."
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+
+                            <Button type="submit">Salvar Tarefa</Button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </>
