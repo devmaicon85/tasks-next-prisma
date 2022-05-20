@@ -7,14 +7,16 @@ import { Task } from "@prisma/client";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import { FaSearch, FaTrash } from "react-icons/fa";
+import { GrCopy } from "react-icons/gr";
 import Header from "@/components/Header";
 import Link from "next/link";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import TextArea from "@/components/TextArea";
 import { SearchCircleIcon } from "@heroicons/react/outline";
-import { MdOutlineManageSearch } from "react-icons/md";
+import { AiFillCopy } from "react-icons/ai";
 import InputButton from "@/components/InputButton";
+import { FcDocument } from "react-icons/fc";
 
 export const getServerSideProps: GetServerSideProps = async ({
     req,
@@ -130,6 +132,11 @@ export default function App() {
             setSaving(false);
         }
     }
+
+    async function handleCopyText(text: string) {
+        navigator.clipboard.writeText(text);
+        toast.success(`Copiado para area de transferência`);
+    }
     return (
         <>
             <Toaster
@@ -142,7 +149,7 @@ export default function App() {
             <Header />
 
             <div className="flex flex-col h-full w-screen ">
-                <div className="max-w-4xl p-4 mx-auto w-screen mt-32 ">
+                <div className="max-w-4xl p-4 mx-auto w-screen mt-10 ">
                     <form className="mb-5" onSubmit={handleSearchSubmit}>
                         <InputButton
                             titleButton="Buscar"
@@ -168,7 +175,7 @@ export default function App() {
                                         className="block p-4 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                                     ></textarea>
 
-                                    <div className=" flex justify-between mb-6 p-4 space-x-2 text-slate-400 text-base ">
+                                    <div className=" flex justify-between mb-6 p-4 text-slate-400 text-base ">
                                         <span className="text-xs">
                                             {task.createdAt &&
                                                 new Intl.DateTimeFormat(
@@ -182,19 +189,32 @@ export default function App() {
                                                 )}
                                         </span>
 
-                                        <button
-                                            disabled={deleting}
-                                            className={`${
-                                                deleting
-                                                    ? "cursor-not-allowed"
-                                                    : ""
-                                            } hover:scale-110 hover:cursor-pointer text-red-600`}
-                                            onClick={() =>
-                                                handleDelete(task.id)
-                                            }
-                                        >
-                                            <FaTrash />
-                                        </button>
+                                        <div className="flex">
+                                            <button
+                                                title="copiar"
+                                                className={`hover:scale-110 mx-3 hover:cursor-pointer text-xl hover:text-blue-500`}
+                                                onClick={() =>
+                                                    handleCopyText(task.title)
+                                                }
+                                            >
+                                                <AiFillCopy />
+                                            </button>
+
+                                            <button
+                                                title="deletar"
+                                                disabled={deleting}
+                                                className={`${
+                                                    deleting
+                                                        ? "cursor-not-allowed"
+                                                        : ""
+                                                } hover:scale-110 hover:cursor-pointer hover:text-red-600`}
+                                                onClick={() =>
+                                                    handleDelete(task.id)
+                                                }
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -212,7 +232,7 @@ export default function App() {
                             <span className="absolute mt-3 h-8 font-mono text-sm flex w-full items-center justify-center">
                                 {saving && "Salvando..."}
                             </span>
-                            <span className="right-0 absolute mt-3">
+                            <span className="right-5 absolute -mt-12">
                                 <Button type="submit">Salvar Tarefa</Button>
                             </span>
                         </form>

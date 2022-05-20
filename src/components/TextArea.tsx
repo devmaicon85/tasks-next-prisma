@@ -13,6 +13,7 @@ export default function TextArea({ className, ...rest }: Props) {
                 bg-gray-50 
                 rounded-lg 
                 border
+                min-h-[60px]
                 placeholder:opacity-70
                 border-gray-300 
                 hover:border-green-500 
