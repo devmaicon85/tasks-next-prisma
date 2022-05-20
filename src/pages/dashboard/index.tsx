@@ -44,37 +44,39 @@ export default function App() {
 
     const [deleting, setDeleting] = useState(false);
     const [saving, setSaving] = useState(false);
-    const [searching, setSearching] = useState(false);
+    const [search, setSearch] = useState(false);
 
     const [tasks, setTasks] = useState<Task[]>([]);
 
     const router = useRouter();
 
     useEffect(() => {
-        return () => {
-            getSearchTasks();
-        };
+        setSearch(true);
     }, []);
+    useEffect(() => {
+        async function getSearchTasks() {
+            if (search === false) {
+                return false;
+            }
 
-    async function getSearchTasks() {
-        try {
-            const response = await axios.get(`/tasks?search=${searchTitle}`);
-            setTasks(response.data);
-        } catch (error) {
-            console.error(error);
+            try {
+                const response = await axios.get(
+                    `/tasks?search=${searchTitle}`
+                );
+                setTasks(response.data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setSearch(false);
+            }
         }
-    }
+
+        getSearchTasks();
+    }, [search, searchTitle]);
 
     async function handleSearchSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        setSearching(true);
-        try {
-            await getSearchTasks();
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setSearching(false);
-        }
+        setSearch(true);
     }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -87,7 +89,7 @@ export default function App() {
             });
 
             if (response) {
-                getSearchTasks();
+                setSearch(true);
                 toast.success(`Tarefa foi salva com sucesso`);
                 setTitle("");
             }
@@ -102,7 +104,7 @@ export default function App() {
         try {
             const response = await axios.delete(`/tasks?id=${id}`);
             if (response) {
-                getSearchTasks();
+                setSearch(true);
                 toast.success(`Tarefa foi deletada com sucesso`);
             }
         } catch (error) {
@@ -119,7 +121,7 @@ export default function App() {
                 task,
             });
             if (response) {
-                getSearchTasks();
+                setSearch(true);
                 toast.success(`Tarefa foi alterada com sucesso`);
             }
         } catch (error) {
@@ -141,19 +143,15 @@ export default function App() {
 
             <div className="flex flex-col h-full w-screen ">
                 <div className="max-w-4xl p-4 mx-auto w-screen mt-32 ">
-                    <label
-                        htmlFor="default-task-input"
-                        className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300"
-                    >
-                        Salvar Tarefa
-                    </label>
-
                     <form className="mb-5" onSubmit={handleSearchSubmit}>
                         <InputButton
                             titleButton="Buscar"
                             placeholder="Buscar Tarefas"
                             onChange={(e) => setSearchTitle(e.target.value)}
                         />
+                        <span className="text-sm opacity-70 w-full flex justify-center p-3">
+                            {search && "Buscando..."}
+                        </span>
                     </form>
 
                     {tasks &&
@@ -184,14 +182,6 @@ export default function App() {
                                                 )}
                                         </span>
 
-                                        {/* <button
-                                            className={`hover:scale-110 hover:cursor-pointer hover:text-green-700`}
-                                            onClick={() =>
-                                                handleAlterTask(task)
-                                            }
-                                        >
-                                            <FcOk className="text-xl" />
-                                        </button> */}
                                         <button
                                             disabled={deleting}
                                             className={`${
@@ -210,7 +200,7 @@ export default function App() {
                             </div>
                         ))}
 
-                    <div className="relative mb-16">
+                    <div className="relative">
                         <form onSubmit={handleSubmit}>
                             <TextArea
                                 rows={4}
@@ -219,8 +209,12 @@ export default function App() {
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                             />
-
-                            <Button type="submit">Salvar Tarefa</Button>
+                            <span className="absolute mt-3 h-8 font-mono text-sm flex w-full items-center justify-center">
+                                {saving && "Salvando..."}
+                            </span>
+                            <span className="right-0 absolute mt-3">
+                                <Button type="submit">Salvar Tarefa</Button>
+                            </span>
                         </form>
                     </div>
                 </div>
