@@ -17,6 +17,7 @@ import { SearchCircleIcon } from "@heroicons/react/outline";
 import { AiFillCopy } from "react-icons/ai";
 import InputButton from "@/components/InputButton";
 import { FcDocument } from "react-icons/fc";
+import { NewTaskModal as NewTaskModal } from "@/components/NewTaskModal";
 
 export const getServerSideProps: GetServerSideProps = async ({
     req,
@@ -39,13 +40,11 @@ export const getServerSideProps: GetServerSideProps = async ({
 };
 
 export default function App() {
-    const [title, setTitle] = useState("");
     const [searchTitle, setSearchTitle] = useState("");
 
     const { data: session } = useSession();
 
     const [deleting, setDeleting] = useState(false);
-    const [saving, setSaving] = useState(false);
     const [search, setSearch] = useState(false);
 
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -81,26 +80,26 @@ export default function App() {
         setSearch(true);
     }
 
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
+    // async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    //     e.preventDefault();
 
-        setSaving(true);
-        try {
-            const response = await axios.post("/tasks", {
-                title,
-            });
+    //     setSaving(true);
+    //     try {
+    //         const response = await axios.post("/tasks", {
+    //             title,
+    //         });
 
-            if (response) {
-                setSearch(true);
-                toast.success(`Tarefa foi salva com sucesso`);
-                setTitle("");
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setSaving(false);
-        }
-    }
+    //         if (response) {
+    //             setSearch(true);
+    //             toast.success(`Tarefa foi salva com sucesso`);
+    //             setTitle("");
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //     } finally {
+    //         setSaving(false);
+    //     }
+    // }
     async function handleDelete(id: string) {
         setDeleting(true);
         try {
@@ -113,23 +112,6 @@ export default function App() {
             console.log(error);
         } finally {
             setDeleting(false);
-        }
-    }
-
-    async function handleAlterTask(task: Task) {
-        setSaving(true);
-        try {
-            const response = await axios.put(`/tasks?id=${task.id}`, {
-                task,
-            });
-            if (response) {
-                setSearch(true);
-                toast.success(`Tarefa foi alterada com sucesso`);
-            }
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setSaving(false);
         }
     }
 
@@ -150,6 +132,10 @@ export default function App() {
 
             <div className="flex flex-col h-full w-screen ">
                 <div className="max-w-4xl p-4 mx-auto w-screen mt-10 ">
+                    <div className="mb-5">
+                        <NewTaskModal handleSetSearch={() => setSearch(true)} />
+                    </div>
+
                     <form className="mb-5" onSubmit={handleSearchSubmit}>
                         <InputButton
                             titleButton="Buscar"
@@ -171,11 +157,10 @@ export default function App() {
                                     <textarea
                                         disabled
                                         value={task.title}
-                                        rows={4}
-                                        className="block p-4 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                                        className="-scroll-mt-2 block p-4 h-16 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                                     ></textarea>
 
-                                    <div className=" flex justify-between mb-6 p-4 text-slate-400 text-base ">
+                                    <div className=" flex justify-between mb-6 p-2 text-slate-400 text-base ">
                                         <span className="text-xs">
                                             {task.createdAt &&
                                                 new Intl.DateTimeFormat(
@@ -220,7 +205,7 @@ export default function App() {
                             </div>
                         ))}
 
-                    <div className="relative">
+                    {/* <div className="relative">
                         <form onSubmit={handleSubmit}>
                             <TextArea
                                 rows={4}
@@ -236,7 +221,7 @@ export default function App() {
                                 <Button type="submit">Salvar Tarefa</Button>
                             </span>
                         </form>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </>
