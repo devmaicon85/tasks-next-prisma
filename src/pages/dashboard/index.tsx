@@ -1,18 +1,12 @@
 import { GetServerSideProps } from "next";
-import { Session } from "next-auth";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { GiMagnifyingGlass } from "react-icons/gi";
-
 import React, { useEffect, useState } from "react";
-import { FaAsterisk, FaEdit, FaTrash } from "react-icons/Fa";
+import { FaTrash } from "react-icons/Fa";
 import axios from "../../lib/axios";
-import { getAllTasks } from "../../lib/api/tasks";
 import { Task } from "@prisma/client";
 import { useRouter } from "next/router";
-
 import toast, { Toaster } from "react-hot-toast";
-import { FcOk, FcPlus, FcSearch } from "react-icons/fc";
 
 export const getServerSideProps: GetServerSideProps = async ({
     req,
