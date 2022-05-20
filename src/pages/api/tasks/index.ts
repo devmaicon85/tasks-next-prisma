@@ -1,23 +1,37 @@
+import { HttpMethod } from "@/types/http";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
-import { getAllTasks } from "../../../lib/dbPrisma/tasks";
-import getUserAuthenticated from "../users/getUserAuthenticated";
+import {
+    createTask,
+    deleteTask,
+    getAllTasks,
+    updateTask,
+} from "@/lib/api/tasks";
+import { authOptions } from "../auth/[...nextauth]";
 
 async function index(req: NextApiRequest, res: NextApiResponse) {
-    // busca tasks somente do usuario autenticado
-    const { method } = req;
+    const session = await getServerSession({ req, res }, authOptions);
+    if (!session) return res.status(401).end();
 
-    if (method === "GET") {
-        try {
-            const { id: userId } = await getUserAuthenticated(req);
-            const task = await getAllTasks(userId);
-            return res.status(200).json(task);
-        } catch (error) {
-            return res.status(500).json(error);
-        }
+    switch (req.method) {
+        case HttpMethod.POST:
+            return await createTask(req, res, session);
+        case HttpMethod.DELETE:
+            return await deleteTask(req, res, session);
+        case HttpMethod.GET:
+            return await getAllTasks(req, res, session);
+        case HttpMethod.PUT:
+            return await updateTask(req, res, session);
+
+        default:
+            res.setHeader("Allow", [
+                HttpMethod.GET,
+                HttpMethod.POST,
+                HttpMethod.PUT,
+                HttpMethod.DELETE,
+            ]);
+            return res.status(405).end(`Method ${req.method} Not Allowed`);
     }
-
-    res.setHeader("Allow", "GET");
-    res.status(405).end("Method not allowed");
 }
 export default index;

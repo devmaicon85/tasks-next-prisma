@@ -1,147 +1,219 @@
 import { GetServerSideProps } from "next";
-import { getSession, signOut } from "next-auth/react";
-import React, { ReactEventHandler, useState } from "react";
+import { Session } from "next-auth";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import { GiMagnifyingGlass } from "react-icons/gi";
+
+import React, { useEffect, useState } from "react";
+import { FaAsterisk, FaEdit, FaTrash } from "react-icons/Fa";
 import axios from "../../lib/axios";
-import { getAllTasks, TaskCreateType } from "../../lib/dbPrisma/tasks";
-import { getUserByEmail, UserCreateType } from "../../lib/dbPrisma/users";
+import { getAllTasks } from "../../lib/api/tasks";
+import { Task } from "@prisma/client";
+import { useRouter } from "next/router";
+
+import toast, { Toaster } from "react-hot-toast";
+import { FcOk, FcPlus, FcSearch } from "react-icons/fc";
 
 export const getServerSideProps: GetServerSideProps = async ({
     req,
     params,
 }) => {
     const session = await getSession({ req });
-    // const { slug } = params;
 
-    // se nao tiver sessao volta para login
-
-    console.log("dashboard:session::", session);
-
-    if (!session?.user?.email) {
+    if (!session?.user.id) {
         return {
             redirect: {
-                destination: "/",
+                destination: "/login",
                 permanent: false,
             },
         };
     }
-
-    // sessao só tem o email do usuario
-    const user = await getUserByEmail(session.user.email);
-
-    console.log("dashboard::getUserByEmail::", user);
-
-    if (!user) {
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false,
-            },
-        };
-    }
-
-    // const { id: userId } = await getUserAuthenticated();
-    let tasks = await getAllTasks(user.id);
 
     return {
-        props: {
-            tasks: JSON.parse(JSON.stringify(tasks)),
-            user: JSON.parse(JSON.stringify(user)),
-        },
+        props: {},
     };
 };
 
-interface TaskProps {
-    tasks: TaskCreateType[];
-    user: UserCreateType;
-}
-
-export default function App({ tasks, user }: TaskProps) {
+export default function App() {
     const [title, setTitle] = useState("");
+
+    const { data: session } = useSession();
+
+    const [deleting, setDeleting] = useState(false);
+    const [saving, setSaving] = useState(false);
+
+    const [tasks, setTasks] = useState<Task[]>([]);
+
+    const router = useRouter();
+
+    async function getTasks() {
+        try {
+            const response = await axios.get("/tasks");
+            setTasks(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        getTasks();
+    }, []);
+
+    // useEffect(() => {
+    //     if (session?.error === "RefreshAccessTokenError") {
+    //         signIn(); // Forçar login para resolver o erro
+    //     }
+    // }, [session]);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const newTask = await axios.post("/tasks/create", {
-            title,
-        });
+        setSaving(true);
+        try {
+            const response = await axios.post("/tasks", {
+                title,
+            });
+
+            if (response) {
+                getTasks();
+                toast.success(`Tarefa foi salva com sucesso`);
+                setTitle("");
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSaving(false);
+        }
+    }
+    async function handleDelete(id: string) {
+        setDeleting(true);
+        try {
+            const response = await axios.delete(`/tasks?id=${id}`);
+            if (response) {
+                getTasks();
+                toast.success(`Tarefa foi deletada com sucesso`);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setDeleting(false);
+        }
+    }
+
+    async function handleAlterTask(task: Task) {
+        setSaving(true);
+        try {
+            const response = await axios.put(`/tasks?id=${task.id}`, {
+                task,
+            });
+            if (response) {
+                getTasks();
+                toast.success(`Tarefa foi alterada com sucesso`);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setSaving(false);
+        }
     }
     return (
-        <div className="h-screen bg-gray-500">
-            <nav className="flex justify-center p-4 bg-gray-600">
-                <h1 className="text-white text-2xl font-bold">
-                    BEM VINDO {user?.email}
-                </h1>
-            </nav>
-            <div>
-                <form
-                    className="flex justify-center mt-10"
-                    onSubmit={handleSubmit}
-                >
-                    <div className="bg-gray-50 p-8 rounded-lg">
-                        <h1 className="text-center mb-4">Write Todo List</h1>
-                        <div className="flex space-x-2 p-2 bg-white rounded-md">
-                            <input
-                                type="text"
-                                placeholder="Write here..."
-                                className="w-full outline-none"
+        <>
+            <Toaster
+                position="bottom-center"
+                toastOptions={{
+                    duration: 10000,
+                }}
+            />
+
+            <div className="flex flex-col h-full w-screen ">
+                <nav className="flex z-10 fixed w-full justify-center p-4 bg-gray-600">
+                    <div className="text-white  flex gap-4 justify-center items-center">
+                        {session?.user?.image && (
+                            <Image
+                                src={session.user?.image!}
+                                alt="avatar"
+                                width={50}
+                                height={50}
+                                className="rounded-full"
+                            />
+                        )}
+                        <span className="text-base">
+                            {session?.user?.email}
+                        </span>
+                    </div>
+                </nav>
+                <div className="max-w-4xl mx-auto w-screen mt-32 ">
+                    <label
+                        htmlFor="default-task-input"
+                        className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300"
+                    >
+                        Salvar Tarefa
+                    </label>
+                    <div className="relative mb-16">
+                        {/* <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                                <FcPlus className="text-xl" />
+                            </div> */}
+                        <form onSubmit={handleSubmit}>
+                            <textarea
+                                rows={4}
+                                id="default-task-input"
+                                className="block p-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                                required
+                                placeholder="descreva aqui a tarefa a ser realizada..."
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                            />
-                            <button className="bg-green-500 px-2 py-1 rounded-md text-white font-semibold">
-                                Salvar
+                            ></textarea>
+                            <button
+                                type="submit"
+                                className="text-white flex-1 hover:scale-105 right-0 absolute mt-3 bg-green-700 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                            >
+                                Salvar Tarefa
                             </button>
-                        </div>
+                        </form>
                     </div>
-                </form>
-                {tasks.map((task, index) => (
-                    <div key={index}>
-                        <div className="flex justify-center">
-                            <div className=" relative justify-center mt-6">
-                                <div className="absolute flex top-0 right-0 p-3 space-x-1">
-                                    <span>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-6 w-6"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
+
+                    {tasks &&
+                        tasks.map((task, index) => (
+                            <div
+                                key={index}
+                                className="max-w-4xl w-fullp-2  rounded-lg"
+                            >
+                                <div className=" relative justify-center bg-slate-50 rounded-lg ">
+                                    <textarea
+                                        disabled
+                                        value={task.title}
+                                        rows={4}
+                                        className="block p-4 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                                    ></textarea>
+
+                                    <div className=" flex justify-end mb-6 p-4 space-x-2 text-slate-400 text-base ">
+                                        {/* <button
+                                            className={`hover:scale-110 hover:cursor-pointer hover:text-green-700`}
+                                            onClick={() =>
+                                                handleAlterTask(task)
+                                            }
                                         >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                            />
-                                        </svg>
-                                    </span>
-                                    <span>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-6 w-6"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
+                                            <FcOk className="text-xl" />
+                                        </button> */}
+                                        <button
+                                            disabled={deleting}
+                                            className={`${
+                                                deleting
+                                                    ? "cursor-not-allowed"
+                                                    : ""
+                                            } hover:scale-110 hover:cursor-pointer text-red-600`}
+                                            onClick={() =>
+                                                handleDelete(task.id)
+                                            }
                                         >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                            />
-                                        </svg>
-                                    </span>
+                                            <FaTrash />
+                                        </button>
+                                    </div>
                                 </div>
-                                <span className="absolute -left-3 -top-3 bg-green-500 flex justify-center items-center rounded-full w-8 h-8 text-gray-50 font-bold">
-                                    9
-                                </span>
-                                <p className="bg-white px-12 py-8 rounded-lg w-80">
-                                    {task.title}
-                                </p>
                             </div>
-                        </div>
-                    </div>
-                ))}
+                        ))}
+                </div>
             </div>
-        </div>
+        </>
     );
 }

@@ -10,6 +10,8 @@ export default class MyDocument extends Document {
                         href="/assets/logo.png"
                         type="image/png"
                     />
+                    <link rel="icon" href="/assets/logo.png" />
+
                     <link
                         rel="preconnect"
                         href="https://fonts.googleapis.com"
