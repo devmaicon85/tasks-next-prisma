@@ -1,5 +1,7 @@
+import { MoonIcon, SunIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
-import { FaAffiliatetheme } from "react-icons/fa";
+import { FaAffiliatetheme, FaMoon, FaSun } from "react-icons/fa";
+import { MdDarkMode, MdOutlineDarkMode } from "react-icons/md";
 
 type Props = {
     className?: string;
@@ -9,48 +11,60 @@ export function DarkTheme({ className }: Props) {
 
     useEffect(() => {
         setDark(localStorage.theme === "dark");
+        onSetDark();
     }, []);
 
     function onSetDark() {
-        if (localStorage.theme === "dark") {
-            localStorage.theme = "light";
-            setDark(false);
-        } else if ((localStorage.theme = "light")) {
-            localStorage.theme = "dark";
-            setDark(true);
-        }
-
         if (
             localStorage.theme === "dark" ||
             (!("theme" in localStorage) &&
                 window.matchMedia("(prefers-color-scheme: dark)").matches)
         ) {
-            console.log("tema é dark adicionado");
-
             document.documentElement.classList.add("dark");
+            localStorage.theme = "dark";
+            setDark(true);
         } else {
-            console.log("tema dark removido");
             document.documentElement.classList.remove("dark");
+            localStorage.theme = "light";
+            setDark(false);
+        }
+    }
+
+    function onAlterTheme() {
+        if (dark) {
+            document.documentElement.classList.remove("dark");
+            localStorage.theme = "light";
+            setDark(false);
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.theme = "dark";
+            setDark(true);
         }
     }
 
     return (
-        <div onClick={onSetDark}>
-            <FaAffiliatetheme
-                title="alterar tema"
-                className={`
+        <div
+            title={`${
+                dark ? "mudar para tema light" : "mudar para tema dark"
+            } `}
+            onClick={onAlterTheme}
+            className={`
+                    w-6
+                    h-6
                     cursor-pointer 
-                    hover:scale-90 
                     text-xl 
-                    opacity-80 
+                    flex
+                    opacity-70
                     hover:opacity-100
+                    hover:scale-110
                     ${dark && "rotate-180"}
                     ease-in-out
                     duration-1000
                     ${className}
-                    
-                `}
-            />
+        
+            `}
+        >
+            {dark ? <FaMoon /> : <FaSun className="text-yellow-300" />}
         </div>
     );
 }

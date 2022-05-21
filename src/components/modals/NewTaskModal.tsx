@@ -26,7 +26,7 @@ export function NewTaskModal({ handleFinally, setIsOpen, isOpen }: PropsType) {
             if (response) {
                 setTitle("");
                 handleFinally();
-                toast.success(`Nova tarefa cadastrada`);
+                toast.success(`Registro salvo com sucesso`);
             }
         } catch (error) {
             console.error(error);
@@ -49,7 +49,7 @@ export function NewTaskModal({ handleFinally, setIsOpen, isOpen }: PropsType) {
                         autoFocus
                         rows={4}
                         required
-                        placeholder="digite aqui uma nova tarefa para hoje.."
+                        placeholder="descrição do novo registro..."
                         onChange={(e) => setTitle(e.target.value)}
                     />
 

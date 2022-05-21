@@ -13,6 +13,7 @@ import imageLogoUrl from "../../public/assets/logo.png";
 import { Button, Input } from "@/components/Index";
 
 import { hash } from "bcryptjs";
+import { DarkTheme } from "@/components/DarkTheme";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req });
@@ -91,7 +92,7 @@ export default function Login() {
 
     return (
         <div className="h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
+            <div className="flex flex-col w-full max-w-md px-4 py-8 rounded-lg shadow bg-gray-100 dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
                 <div className="justify-center mb-4  flex w-full">
                     <Image
                         src={imageLogoUrl}
@@ -100,8 +101,8 @@ export default function Login() {
                         alt="logo"
                     ></Image>
                 </div>
-                <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
-                    Efetue o Login
+                <div className="flex self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
+                    Efetue o Login <DarkTheme className="ml-2" />
                 </div>
                 {status === "authenticated" && (
                     <p className="text-sm">você está autenticado</p>
@@ -115,10 +116,11 @@ export default function Login() {
                     >
                         <div className="flex flex-col mb-2">
                             <div className="flex relative ">
-                                <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
+                                <span className="rounded-l-md inline-flex  dark:bg-gray-600 dark:border-gray-500 items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
                                     <MdOutlineAlternateEmail />
                                 </span>
                                 <Input
+                                    className="rounded-l-none "
                                     type="text"
                                     autoComplete=""
                                     placeholder="E-mail"
@@ -128,10 +130,11 @@ export default function Login() {
                         </div>
                         <div className="flex flex-col mb-6">
                             <div className="flex relative ">
-                                <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
+                                <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white  dark:bg-gray-600 dark:border-gray-500 border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
                                     <FaLock />
                                 </span>
                                 <Input
+                                    className="rounded-l-none"
                                     type="password"
                                     autoComplete=""
                                     //className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
@@ -159,7 +162,7 @@ export default function Login() {
                             </div>
                         </div>
                         <div className="flex w-full">
-                            <Button type="submit">
+                            <Button type="submit" disabled={isLogging}>
                                 <HiLogout className="text-xl" />{" "}
                                 {isLogging ? "Entrando..." : "Entrar"}
                             </Button>

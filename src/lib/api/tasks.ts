@@ -93,7 +93,7 @@ export async function deleteTask(
         if (!task) {
             return res
                 .status(400)
-                .end("Tarefa não encontrada para o usuário logado");
+                .end("Registro não encontrado para o usuário logado");
         }
 
         await prismaClient.task.delete({
@@ -142,7 +142,7 @@ export async function updateTask(
         if (!task) {
             return res
                 .status(400)
-                .end("Tarefa não encontrada para o usuário logado");
+                .end("Registro não encontrado para o usuário logado");
         }
 
         const response = await prismaClient.task.update({

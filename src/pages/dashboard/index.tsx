@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 import { AiFillCopy } from "react-icons/ai";
 import { Session } from "next-auth";
-import { Header, InputButton, Button } from "@/components/Index";
+import { Header, InputButton, Button, TextArea } from "@/components/Index";
 import { FcPlus } from "react-icons/fc";
 import { ConfigurationModal } from "@/components/modals/ConfigurationModal";
 import { NewTaskModal } from "@/components/modals/NewTaskModal";
@@ -80,7 +80,7 @@ export default function App() {
             const response = await axios.delete(`/tasks?id=${id}`);
             if (response) {
                 setSearch(true);
-                toast.success(`Tarefa foi deletada com sucesso`);
+                toast.success(`Registro deletado com sucesso`);
             }
         } catch (error) {
             console.log(error);
@@ -126,7 +126,7 @@ export default function App() {
                     <form className="mb-5" onSubmit={handleSearchSubmit}>
                         <InputButton
                             titleButton="Buscar"
-                            placeholder="Buscar Tarefas"
+                            placeholder="Buscar Registros"
                             onChange={(e) => setSearchTitle(e.target.value)}
                         />
                         <span className="text-sm opacity-70 w-full flex justify-center p-3">
@@ -140,16 +140,13 @@ export default function App() {
                                 key={index}
                                 className="max-w-4xl w-fullp-2  rounded-lg"
                             >
-                                <div className=" relative justify-center bg-slate-50 rounded-lg ">
-                                    <textarea
+                                <div className=" relative justify-center dark:bg-slate-800  bg-slate-200 rounded-lg ">
+                                    <TextArea
                                         disabled
                                         value={task.title}
-                                        className="  scrollbar-thin
-                                        scrollbar-track-slate-50
-                                        scrollbar-thumb-slate-300 block p-4 h-16 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
-                                    ></textarea>
+                                    ></TextArea>
 
-                                    <div className=" flex justify-between mb-6 p-2 text-slate-400 text-base ">
+                                    <div className=" flex justify-between  mb-6 p-2  text-base ">
                                         <span className="text-xs">
                                             {task.createdAt &&
                                                 new Intl.DateTimeFormat(
@@ -193,24 +190,6 @@ export default function App() {
                                 </div>
                             </div>
                         ))}
-
-                    {/* <div className="relative">
-                        <form onSubmit={handleSubmit}>
-                            <TextArea
-                                rows={4}
-                                required
-                                placeholder="digite aqui uma nova tarefa para hoje.."
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                            />
-                            <span className="absolute mt-3 h-8 font-mono text-sm flex w-full items-center justify-center">
-                                {saving && "Salvando..."}
-                            </span>
-                            <span className="right-5 absolute -mt-12">
-                                <Button type="submit">Salvar Tarefa</Button>
-                            </span>
-                        </form>
-                    </div> */}
                 </div>
             </div>
         </>
