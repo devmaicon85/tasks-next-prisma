@@ -9,7 +9,7 @@ export function InputButton({ className, titleButton, ...rest }: Props) {
     return (
         <div className="relative ">
             <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <MdOutlineManageSearch className="text-xl opacity-50" />
+                <MdOutlineManageSearch className="text-2xl opacity-40" />
             </div>
             <input
                 className={`
@@ -40,8 +40,7 @@ export function InputButton({ className, titleButton, ...rest }: Props) {
             />
             <Button
                 type="submit"
-                className="absolute right-2.5 bottom-2.5"
-                // className="text-white absolute right-2.5 bottom-2.5 bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                className="absolute right-2.5 bottom-[0.3rem]"
             >
                 {titleButton}
             </Button>

@@ -11,7 +11,7 @@ import {
     getAllTasks,
     updateTask,
 } from "@/lib/api/tasks";
-import { authOptions } from "../auth/[...nextauth]";
+import { authOptions } from "./auth/[...nextauth]";
 
 async function index(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession({ req, res }, authOptions);

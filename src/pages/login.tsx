@@ -3,6 +3,7 @@ import { getSession, signIn, useSession, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { FaGithub, FaGoogle, FaLock } from "react-icons/fa";
 import { MdOutlineAlternateEmail } from "react-icons/md";
+import { HiLogout } from "react-icons/hi";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
@@ -102,7 +103,9 @@ export default function Login() {
                 <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
                     Efetue o Login
                 </div>
-                {status === "authenticated" && <p>você já está autenticado</p>}
+                {status === "authenticated" && (
+                    <p className="text-sm">você está autenticado</p>
+                )}
 
                 <div className="mt-2">
                     <form
@@ -118,7 +121,6 @@ export default function Login() {
                                 <Input
                                     type="text"
                                     autoComplete=""
-                                    //className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                                     placeholder="E-mail"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -158,6 +160,7 @@ export default function Login() {
                         </div>
                         <div className="flex w-full">
                             <Button type="submit">
+                                <HiLogout className="text-xl" />{" "}
                                 {isLogging ? "Entrando..." : "Entrar"}
                             </Button>
                         </div>

@@ -7,7 +7,8 @@ export function Button({ children, className, ...rest }: ButtonProps) {
         <button
             {...rest}
             className={`
-                py-2 px-4 text-white text-sm uppercase transition ease-in duration-200 flex-1 
+                flex gap-2 justify-center items-center
+                py-3 px-4 text-white text-sm  transition ease-in duration-200 flex-1 
                 hover:scale-[99%] bg-green-700 hover:bg-green-900 
                 focus:ring-4 focus:outline-none focus:ring-green-300
                 rounded-lg 

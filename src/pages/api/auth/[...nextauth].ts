@@ -97,9 +97,9 @@ export const authOptions = {
         maxAge: 30 * 24 * 60 * 60, // 30 days * 2
         updateAge: 24 * 60 * 60, // 24 hours
     },
-    authoptions: {
-        useSecureCookies: false,
-    },
+    // authoptions: {
+    //     useSecureCookies: false,
+    // },
 
     debug: process.env.NODE_ENV === "development",
 

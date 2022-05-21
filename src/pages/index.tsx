@@ -5,11 +5,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req });
 
     if (!session) {
-        console.log("index:: user sem sessão.");
-
         return {
             redirect: {
-                destination: "/login",
+                destination: "/home",
                 permanent: false,
             },
         };
@@ -17,7 +15,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     if (session) {
         return {
-            // se tiver entra no app antes de aparecer tela pro usuario
             redirect: {
                 destination: "/dashboard",
                 permanent: false,

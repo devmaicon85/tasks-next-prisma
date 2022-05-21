@@ -1,9 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import Image from "next/image";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import imageLogoUrl from "../../public/assets/logo.png";
+import { ConfigurationModal } from "./modals/ConfigurationModal";
+import { DarkTheme } from "./DarkTheme";
 
 const navigation = [
     { name: "Home", href: "#", current: true },
@@ -18,6 +20,8 @@ function classNames(...classes: string[]) {
 export function Header() {
     const { data: session } = useSession();
 
+    const [isOpenModalConfig, setIsOpenModalConfig] = useState(false);
+
     function Logoff() {
         signOut({ redirect: true });
     }
@@ -26,6 +30,11 @@ export function Header() {
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
                 <>
+                    <ConfigurationModal
+                        handleFinally={() => {}}
+                        setIsOpen={setIsOpenModalConfig}
+                        isOpen={isOpenModalConfig}
+                    />
                     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 z-10">
                         <div className="relative flex items-center justify-between h-16">
                             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -93,6 +102,7 @@ export function Header() {
                                         aria-hidden="true"
                                     />
                                 </button>
+                                <DarkTheme className="h-8 w-8 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" />
 
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="ml-3 relative">
@@ -141,6 +151,11 @@ export function Header() {
                                             <Menu.Item>
                                                 {({ active }) => (
                                                     <a
+                                                        onClick={() =>
+                                                            setIsOpenModalConfig(
+                                                                true
+                                                            )
+                                                        }
                                                         href="#"
                                                         className={classNames(
                                                             active

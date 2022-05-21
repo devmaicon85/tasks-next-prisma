@@ -9,7 +9,10 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 import { AiFillCopy } from "react-icons/ai";
 import { Session } from "next-auth";
-import { Header, NewTaskModal, InputButton } from "@/components/Index";
+import { Header, InputButton, Button } from "@/components/Index";
+import { FcPlus } from "react-icons/fc";
+import { ConfigurationModal } from "@/components/modals/ConfigurationModal";
+import { NewTaskModal } from "@/components/modals/NewTaskModal";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession({ req: context.req });
@@ -35,6 +38,8 @@ export default function App() {
 
     const [deleting, setDeleting] = useState(false);
     const [search, setSearch] = useState(false);
+
+    const [isOpenModalNewTask, setIsOpenModalNewTask] = useState(false);
 
     const [tasks, setTasks] = useState<Task[]>([]);
 
@@ -90,19 +95,32 @@ export default function App() {
     }
     return (
         <>
-            <Toaster
-                position="bottom-center"
-                toastOptions={{
-                    duration: 10000,
-                }}
-            />
+            <div className="flex flex-col h-screen w-screen dark:bg-slate-700 dark:text-white text-slate-700 ">
+                <Toaster
+                    position="bottom-center"
+                    toastOptions={{
+                        duration: 10000,
+                    }}
+                />
 
-            <Header />
+                <Header />
 
-            <div className="flex flex-col h-full w-screen ">
                 <div className="max-w-4xl p-4 mx-auto w-screen mt-10 ">
                     <div className="mb-5">
-                        <NewTaskModal handleSetSearch={() => setSearch(true)} />
+                        <NewTaskModal
+                            handleFinally={() => {
+                                setSearch(true);
+                            }}
+                            setIsOpen={setIsOpenModalNewTask}
+                            isOpen={isOpenModalNewTask}
+                        />
+
+                        <Button
+                            type="button"
+                            onClick={() => setIsOpenModalNewTask(true)}
+                        >
+                            <FcPlus className="text-xl" /> Incluir Novo
+                        </Button>
                     </div>
 
                     <form className="mb-5" onSubmit={handleSearchSubmit}>
