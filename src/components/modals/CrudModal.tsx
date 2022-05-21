@@ -95,8 +95,8 @@ export function CrudModal({
                         <div>
                             <Button
                                 type="submit"
-                                color={
-                                    typeSubmit === "delete" ? "red" : "green"
+                                className={
+                                    typeSubmit === "delete" ? "bg-red-500" : ""
                                 }
                             >
                                 {nameButton} {loading && "..."}

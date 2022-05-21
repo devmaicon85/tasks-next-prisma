@@ -31,6 +31,8 @@ export function TextArea({ className, ...rest }: Props) {
                 dark:text-slate-300 
                 dark:focus:ring-green-500 
                 dark:focus:border-green-500
+
+                disabled:opacity-60
                 ${className}
 
             `}

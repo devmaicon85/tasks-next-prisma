@@ -44,9 +44,7 @@ export default function App() {
     const [searchText, setSearchText] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [dataEdit, setDataEdit] = useState<DataEditType>();
-
     const [search, setSearch] = useState(false);
-
     const [data, setData] = useState<Task[]>([]);
     const [typeSubmit, setTypeSubmit] = useState<typeSubmitCrudType>("new");
 
@@ -103,9 +101,7 @@ export default function App() {
     }
 
     return (
-        <div className="flex flex-col h-screen w-screen dark:bg-slate-900 dark:text-white text-slate-700 ">
-            <Header />
-            <Toaster position="bottom-center" />
+        <>
             <CrudModal
                 endPoint="/tasks"
                 typeSubmit={typeSubmit}
@@ -117,81 +113,88 @@ export default function App() {
                     setSearch(true);
                 }}
             />
-            <div className="max-w-4xl px-5 mx-auto w-screen mt-10  ">
-                <div className="mb-5">
-                    <Button type="button" onClick={handleNewData}>
-                        <FcPlus className="text-2xl" /> Incluir Novo
-                    </Button>
-                </div>
+            <div className="flex flex-col h-screen w-screen dark:bg-slate-900 dark:text-white text-slate-700 ">
+                <Header />
+                <Toaster position="bottom-center" />
 
-                <form className="mb-5" onSubmit={handleSearchSubmit}>
-                    <InputAndButton
-                        titleButton="Buscar"
-                        placeholder="Buscar Registros"
-                        onChange={(e) => setSearchText(e.target.value)}
-                    />
-                    <span className="text-sm h-3 opacity-70 w-full flex justify-center p-3">
-                        {search && "Buscando..."}
-                    </span>
-                </form>
+                <div className="max-w-4xl px-5 mx-auto w-screen mt-10  ">
+                    <div className="mb-5">
+                        <Button type="button" onClick={handleNewData}>
+                            <FcPlus className="text-2xl" /> Incluir Novo
+                        </Button>
+                    </div>
 
-                {data &&
-                    data.map((item, index) => (
-                        <div key={index}>
-                            <div className="dark:bg-slate-800  bg-slate-200 rounded-lg ">
-                                <div className="m-1 p-1">
-                                    <TextArea
-                                        disabled
-                                        className="border-0"
-                                        value={item.title}
-                                    ></TextArea>
-                                </div>
+                    <form className="mb-5" onSubmit={handleSearchSubmit}>
+                        <InputAndButton
+                            titleButton={`Pesquisar ${search ? "..." : ""}`}
+                            placeholder="Buscar Registros"
+                            onChange={(e) => setSearchText(e.target.value)}
+                        />
+                    </form>
 
-                                <div className=" flex justify-between  mb-3 p-2  text-base ">
-                                    <span className="text-xs opacity-50">
-                                        {item.createdAt &&
-                                            new Intl.DateTimeFormat("pt-BR", {
-                                                dateStyle: "full",
-                                                timeStyle: "short",
-                                            }).format(new Date(item.createdAt))}
-                                    </span>
+                    {data &&
+                        data.map((item, index) => (
+                            <div key={index}>
+                                <div className="dark:bg-slate-800  bg-slate-200 rounded-lg ">
+                                    <div className="m-1 p-1">
+                                        <TextArea
+                                            disabled
+                                            className="border-0"
+                                            value={item.title}
+                                        ></TextArea>
+                                    </div>
 
-                                    <div className="flex">
-                                        <ButtonMiniIcon
-                                            title="Copiar"
-                                            className="hover:text-green-500"
-                                            onClick={() =>
-                                                handleCopyText(item.title)
-                                            }
-                                        >
-                                            <AiFillCopy className="text-base" />
-                                        </ButtonMiniIcon>
+                                    <div className=" flex justify-between  mb-3 p-2  text-base ">
+                                        <span className="text-xs opacity-50">
+                                            {item.createdAt &&
+                                                new Intl.DateTimeFormat(
+                                                    "pt-BR",
+                                                    {
+                                                        dateStyle: "full",
+                                                        timeStyle: "short",
+                                                    }
+                                                ).format(
+                                                    new Date(item.createdAt)
+                                                )}
+                                        </span>
 
-                                        <ButtonMiniIcon
-                                            title="Alterar"
-                                            className="hover:text-blue-500"
-                                            onClick={() =>
-                                                handleAlterData(item)
-                                            }
-                                        >
-                                            <AiFillEdit className="text-xl" />
-                                        </ButtonMiniIcon>
+                                        <div className="flex">
+                                            <ButtonMiniIcon
+                                                title="Copiar"
+                                                className="hover:text-green-500"
+                                                onClick={() =>
+                                                    handleCopyText(item.title)
+                                                }
+                                            >
+                                                <AiFillCopy className="text-base" />
+                                            </ButtonMiniIcon>
 
-                                        <ButtonMiniIcon
-                                            title="Deletar"
-                                            className="hover:text-red-500"
-                                            onClick={() =>
-                                                handleDeleteData(item)
-                                            }
-                                        >
-                                            <FaTrash className="text-sm" />
-                                        </ButtonMiniIcon>
+                                            <ButtonMiniIcon
+                                                title="Alterar"
+                                                className="hover:text-blue-500"
+                                                onClick={() =>
+                                                    handleAlterData(item)
+                                                }
+                                            >
+                                                <AiFillEdit className="text-xl" />
+                                            </ButtonMiniIcon>
+
+                                            <ButtonMiniIcon
+                                                title="Deletar"
+                                                className="hover:text-red-500"
+                                                onClick={() =>
+                                                    handleDeleteData(item)
+                                                }
+                                            >
+                                                <FaTrash className="text-sm" />
+                                            </ButtonMiniIcon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                </div>
             </div>
-        </div>
+        </>
     );
 }

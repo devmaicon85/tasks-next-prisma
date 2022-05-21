@@ -49,14 +49,15 @@ export function ThemeButton({ className }: Props) {
             } `}
             onClick={onAlterTheme}
             className={`
-                    w-6
-                    h-6
+                    w-10
+                    h-10
                     cursor-pointer 
-                    text-xl 
+                    text-2xl 
                     flex
                     opacity-70
                     hover:opacity-100
-                    hover:scale-110
+                    justify-center
+                    items-center
                     ${dark && "rotate-180"}
                     ease-in-out
                     duration-1000

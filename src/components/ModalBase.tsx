@@ -24,11 +24,11 @@ export function ModalBase({
         <Modal
             isOpen={isOpen}
             onRequestClose={() => setIsOpen(false)}
-            overlayClassName="react-modal-overlay"
+            // overlayClassName="react-modal-overlay"
             className="react-modal-content"
         >
-            <div className="py-12 bg-slate-800  transition duration-1000 ease-in-out z-20 absolute top-0 right-0 bottom-0 left-0">
-                <div className="container mx-auto w-full md:w-2/3 max-w-3xl">
+            <div className="py-12 bg-slate-800  transition duration-500 ease-in-out z-20 absolute top-0 right-0 bottom-0 left-0">
+                <div className="container mx-auto w-full p-5 md:w-2/3 max-w-3xl">
                     <div className="relative py-8 px-5 md:px-10 bg-gray-100 dark:bg-gray-700 shadow-md rounded-2xl border border-gray-400">
                         <div className="flex flex-row h-14 gap-4 items-center dark:text-gray-100 text-gray-600 mb-5">
                             {icon}
