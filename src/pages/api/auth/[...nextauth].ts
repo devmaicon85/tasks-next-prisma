@@ -1,8 +1,13 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
+
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import axios from "@/lib/axios";
+import { compare } from "bcryptjs";
+import prismaClient from "@/lib/prismaClient";
 
 const prisma = new PrismaClient();
 
@@ -11,7 +16,7 @@ export const authOptions = {
     pages: {
         signIn: "/dashboard",
         signOut: "/login",
-        error: "/error",
+        error: "/login",
     },
 
     providers: [
@@ -32,27 +37,70 @@ export const authOptions = {
             //     };
             // },
         }),
-    ],
-    callbacks: {
-        async signIn({ user, account, profile, email, credentials }) {
-            return true;
-        },
-        async redirect({ url, baseUrl }) {
-            return baseUrl;
-        },
-        async session({ session, token, user }) {
-            return {
-                ...session,
-                user: {
-                    ...session.user,
-                    id: user.id,
+        CredentialsProvider({
+            name: "Credentials",
+            credentials: {
+                email: {
+                    label: "E-mail",
+                    type: "text",
+                    placeholder: "seuemail@gmail.com",
                 },
-            };
-        },
-        // async jwt({ token, user, account, profile, isNewUser }) {
-        //     return token;
-        // },
+                password: { label: "Password", type: "password" },
+            },
+            async authorize(credentials, req) {
+                const email = credentials?.email;
+                const password = credentials?.password;
+
+                if (!email || !email.includes("@") || !password) {
+                    throw new Error("E-mail ou Senha inválidos");
+                }
+
+                try {
+                    const user = await prismaClient.user.findUnique({
+                        where: {
+                            email,
+                        },
+                    });
+                    if (!user) {
+                        throw new Error("Usuário não encontrado");
+                    }
+                    if (!user.password) {
+                        throw new Error("Usuário sem senha definida");
+                    }
+
+                    const checkPassword = await compare(
+                        password,
+                        user.password
+                    );
+
+                    if (checkPassword) {
+                        return {
+                            email: user.email,
+                            name: user.name,
+                            image: user.image,
+                        };
+                    } else {
+                        throw new Error("Senha inválida");
+                    }
+                } catch (error) {
+                    throw new Error(`${error}`);
+                }
+            },
+        }),
+    ],
+
+    secret: process.env.NEXTAUTH_SECRET,
+    session: {
+        jwt: true,
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days * 2
+        updateAge: 24 * 60 * 60, // 24 hours
     },
+    authoptions: {
+        useSecureCookies: false,
+    },
+
+    debug: process.env.NODE_ENV === "development",
     events: {
         async signIn() {},
         async signOut() {},
@@ -61,6 +109,40 @@ export const authOptions = {
         async linkAccount() {},
         async session() {},
     },
+    // jwt: {
+    //     secret: process.env.NEXTAUTH_SECRET,
+    // },
+    // callbacks: {
+    //     async signIn({ user, account, profile, email, credentials }) {
+    //         return true;
+    //     },
+    //     async redirect({ url, baseUrl }) {
+    //         return baseUrl;
+    //     },
+    //     async jwt({ token, user }) {
+    //         console.log("nextAuth:jwt::", token);
+    //         console.log("nextAuth:jwt:user:", user);
+    //         if (user) {
+    //             token.jwt = user.jwt ?? "";
+    //             token.user = user.user;
+    //             token.accessToken = user?.accessToken ?? "";
+    //         }
+    //         return Promise.resolve(token);
+    //     },
+    //     async session({ session, token, user }) {
+    //         console.log("nextAuth:session::", session);
+    //         console.log("nextAuth:session:token::", token);
+    //         return {
+    //             ...session,
+    //             jwt: token?.jwt ?? "",
+    //             accessToken: token?.accessToken ?? "",
+    //             user: {
+    //                 ...session.user,
+    //                 id: user.id,
+    //             },
+    //         };
+    //     },
+    // },
 } as NextAuthOptions;
 
 export default NextAuth(authOptions);

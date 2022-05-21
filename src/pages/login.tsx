@@ -1,14 +1,30 @@
 import { GetServerSideProps } from "next";
 import { getSession, signIn, useSession, signOut } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaGithub, FaGoogle, FaLock } from "react-icons/fa";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import Image from "next/image";
+import imageLogoUrl from "../../public/assets/logo.png";
+import Input from "@/components/Input";
+
+import { hash } from "bcryptjs";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req });
+
+    if (session) {
+        return {
+            // se tiver entra no app antes de aparecer tela pro usuario
+            redirect: {
+                destination: "/dashboard",
+                permanent: false,
+            },
+        };
+    }
 
     return {
         props: {},
@@ -16,11 +32,54 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 };
 
 export default function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loginError, setLoginError] = useState("");
+    const [isLogging, setIsLogging] = useState(false);
+
+    const router = useRouter();
+
+    // useEffect(() => {
+    //     if (router.query.error) {
+    //         setLoginError(String(router.query.error));
+    //         setEmail(String(router.query.email));
+    //     }
+    // }, [router]);
+
+    async function handleSignInCredentials(
+        e: React.FormEvent<HTMLFormElement>
+    ) {
+        e.preventDefault();
+
+        setIsLogging(true);
+        setLoginError("");
+
+        console.log("password", await hash(password, 12));
+        const status: any = await signIn("credentials", {
+            email,
+            password,
+            callbackUrl: `${window.location.origin}/dashboard`,
+            redirect: false,
+        });
+
+        console.log("status login", status);
+
+        if (status?.error) {
+            setLoginError(status.error);
+            setIsLogging(false);
+        }
+        if (status.url) {
+            console.log("redirecionado para...", status.url);
+            router.push(status.url);
+        }
+    }
+
     const { data: session, status } = useSession();
 
     // if (status === "authenticated") {
     //     Router.push("/dashboard");
     // }
+
     function SignInGitHub() {
         signIn("github");
     }
@@ -32,23 +91,36 @@ export default function Login() {
     return (
         <div className="h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
+                <div className="justify-center mb-4  flex w-full">
+                    <Image
+                        src={imageLogoUrl}
+                        width={70}
+                        height={70}
+                        alt="logo"
+                    ></Image>
+                </div>
                 <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
                     Efetue o Login
                 </div>
                 {status === "authenticated" && <p>você já está autenticado</p>}
 
-                <div className="mt-8">
-                    <form action="#" autoComplete="off">
+                <div className="mt-2">
+                    <form
+                        action="#"
+                        autoComplete="off"
+                        onSubmit={handleSignInCredentials}
+                    >
                         <div className="flex flex-col mb-2">
                             <div className="flex relative ">
                                 <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
                                     <MdOutlineAlternateEmail />
                                 </span>
-                                <input
+                                <Input
                                     type="text"
-                                    id="sign-in-email"
-                                    className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                                    autoComplete=""
+                                    //className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                                     placeholder="E-mail"
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -57,14 +129,23 @@ export default function Login() {
                                 <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
                                     <FaLock />
                                 </span>
-                                <input
+                                <Input
                                     type="password"
-                                    id="sign-in-email"
-                                    className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                                    autoComplete=""
+                                    //className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                                     placeholder="Password"
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
                                 />
                             </div>
+                            {loginError && (
+                                <div className="text-sm text-red-400 my-3">
+                                    {loginError}
+                                </div>
+                            )}
                         </div>
+
                         <div className="flex items-center mb-6 -mt-4">
                             <div className="flex ml-auto">
                                 <a
@@ -78,9 +159,9 @@ export default function Login() {
                         <div className="flex w-full">
                             <button
                                 type="submit"
-                                className="py-2 px-4  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                                className="py-2 px-4  bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
                             >
-                                Entrar
+                                {isLogging ? "Entrando..." : "Entrar"}
                             </button>
                         </div>
                     </form>

@@ -2,6 +2,10 @@ import { HttpMethod } from "@/types/http";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
+
+import { getToken } from "next-auth/jwt";
+const secret = process.env.NEXTAUTH_SECRET;
+
 import {
     createTask,
     deleteTask,
@@ -13,6 +17,9 @@ import { authOptions } from "../auth/[...nextauth]";
 async function index(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession({ req, res }, authOptions);
     if (!session) return res.status(401).end();
+
+    const token = await getToken({ req, secret });
+    if (!token) return res.status(401).end();
 
     switch (req.method) {
         case HttpMethod.POST:

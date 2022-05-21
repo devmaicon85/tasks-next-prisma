@@ -1,13 +1,11 @@
 import Modal from "react-modal";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import TextArea from "./TextArea";
 import Button from "./Button";
 import axios from "@/lib/axios";
 import { FaTasks } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
-
-Modal.setAppElement("#root_modal");
 
 type PropsType = {
     handleSetSearch: () => void;
@@ -44,6 +42,11 @@ export function NewTaskModal({ handleSetSearch }: PropsType) {
     function onRequestClose() {
         setIsOpen(false);
     }
+
+    useEffect(() => {
+        Modal.setAppElement("#root_modal");
+    }, []);
+
     return (
         <>
             <Button type="button" onClick={() => setIsOpen(true)}>
@@ -56,7 +59,7 @@ export function NewTaskModal({ handleSetSearch }: PropsType) {
                 overlayClassName="react-modal-overlay"
                 className="react-modal-content"
             >
-                <div className="py-12 bg-gray-700 bg-opacity-50 transition duration-1000 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0">
+                <div className="py-12 bg-gray-700 bg-opacity-50 transition duration-1000 ease-in-out z-20 absolute top-0 right-0 bottom-0 left-0">
                     <div className="container mx-auto w-full md:w-2/3 max-w-3xl">
                         <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded-2xl border border-gray-400">
                             <div className="flex flex-row h-14 gap-4 items-center text-gray-600 mb-5">

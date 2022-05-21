@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import axios from "../../lib/axios";
@@ -18,14 +19,13 @@ import { AiFillCopy } from "react-icons/ai";
 import InputButton from "@/components/InputButton";
 import { FcDocument } from "react-icons/fc";
 import { NewTaskModal as NewTaskModal } from "@/components/NewTaskModal";
+import { Session } from "next-auth";
 
-export const getServerSideProps: GetServerSideProps = async ({
-    req,
-    params,
-}) => {
-    const session = await getSession({ req });
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getSession({ req: context.req });
 
-    if (!session?.user.id) {
+    console.log("dashboard:server:session::", session);
+    if (!session) {
         return {
             redirect: {
                 destination: "/login",
@@ -35,14 +35,18 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     return {
-        props: {},
+        props: { session },
     };
 };
 
-export default function App() {
+type Props = {
+    session: Session;
+};
+
+export default function App({ session }: Props) {
     const [searchTitle, setSearchTitle] = useState("");
 
-    const { data: session } = useSession();
+    // const { data: session } = useSession();
 
     const [deleting, setDeleting] = useState(false);
     const [search, setSearch] = useState(false);
