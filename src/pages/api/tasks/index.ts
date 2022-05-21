@@ -1,7 +1,6 @@
 import { HttpMethod } from "@/types/http";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 
 import { getToken } from "next-auth/jwt";
 const secret = process.env.NEXTAUTH_SECRET;
@@ -17,6 +16,11 @@ import { authOptions } from "../auth/[...nextauth]";
 async function index(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession({ req, res }, authOptions);
     if (!session) return res.status(401).end();
+
+    if (!session.user.id)
+        return res
+            .status(500)
+            .end("O servidor falhou ao obter o ID do usuário da sessão");
 
     const token = await getToken({ req, secret });
     if (!token) return res.status(401).end();

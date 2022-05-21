@@ -12,6 +12,11 @@ export async function getAllTasks(
     try {
         const { search } = req.query;
 
+        if (!session.user.id)
+            return res
+                .status(500)
+                .end("O servidor falhou ao obter o ID do usuário da sessão");
+
         if (Array.isArray(search)) {
             return res.status(400).end("Título inválido");
         }
@@ -41,7 +46,9 @@ export async function createTask(
     // const { query } = req.query;
 
     if (!session.user.id)
-        return res.status(500).end("Server failed to get session user ID");
+        return res
+            .status(500)
+            .end("O servidor falhou ao obter o ID do usuário da sessão");
 
     if (title === "") return res.status(400).end("Título inválido");
 
@@ -69,6 +76,11 @@ export async function deleteTask(
     if (Array.isArray(id)) {
         return res.status(400).end("Id inválido");
     }
+
+    if (!session.user.id)
+        return res
+            .status(500)
+            .end("O servidor falhou ao obter o ID do usuário da sessão");
 
     try {
         const task = await prismaClient.task.findFirst({
@@ -105,6 +117,11 @@ export async function updateTask(
     const { id } = req.query;
 
     const { task } = req.body;
+
+    if (!session.user.id)
+        return res
+            .status(500)
+            .end("O servidor falhou ao obter o ID do usuário da sessão");
 
     if (Array.isArray(id)) {
         return res.status(400).end("Id não enviado");

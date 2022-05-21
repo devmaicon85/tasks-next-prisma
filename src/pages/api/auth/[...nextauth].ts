@@ -75,6 +75,7 @@ export const authOptions = {
 
                     if (checkPassword) {
                         return {
+                            id: user.id,
                             email: user.email,
                             name: user.name,
                             image: user.image,
@@ -101,6 +102,7 @@ export const authOptions = {
     },
 
     debug: process.env.NODE_ENV === "development",
+
     events: {
         async signIn() {},
         async signOut() {},
@@ -109,40 +111,18 @@ export const authOptions = {
         async linkAccount() {},
         async session() {},
     },
-    // jwt: {
-    //     secret: process.env.NEXTAUTH_SECRET,
-    // },
-    // callbacks: {
-    //     async signIn({ user, account, profile, email, credentials }) {
-    //         return true;
-    //     },
-    //     async redirect({ url, baseUrl }) {
-    //         return baseUrl;
-    //     },
-    //     async jwt({ token, user }) {
-    //         console.log("nextAuth:jwt::", token);
-    //         console.log("nextAuth:jwt:user:", user);
-    //         if (user) {
-    //             token.jwt = user.jwt ?? "";
-    //             token.user = user.user;
-    //             token.accessToken = user?.accessToken ?? "";
-    //         }
-    //         return Promise.resolve(token);
-    //     },
-    //     async session({ session, token, user }) {
-    //         console.log("nextAuth:session::", session);
-    //         console.log("nextAuth:session:token::", token);
-    //         return {
-    //             ...session,
-    //             jwt: token?.jwt ?? "",
-    //             accessToken: token?.accessToken ?? "",
-    //             user: {
-    //                 ...session.user,
-    //                 id: user.id,
-    //             },
-    //         };
-    //     },
-    // },
+
+    callbacks: {
+        async session({ session, token }) {
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: token.sub,
+                },
+            };
+        },
+    },
 } as NextAuthOptions;
 
 export default NextAuth(authOptions);

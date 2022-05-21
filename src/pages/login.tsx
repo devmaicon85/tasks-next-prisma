@@ -9,7 +9,7 @@ import Router, { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import imageLogoUrl from "../../public/assets/logo.png";
-import Input from "@/components/Input";
+import { Button, Input } from "@/components/Index";
 
 import { hash } from "bcryptjs";
 
@@ -157,12 +157,9 @@ export default function Login() {
                             </div>
                         </div>
                         <div className="flex w-full">
-                            <button
-                                type="submit"
-                                className="py-2 px-4  bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                            >
+                            <Button type="submit">
                                 {isLogging ? "Entrando..." : "Entrar"}
-                            </button>
+                            </Button>
                         </div>
                     </form>
                 </div>

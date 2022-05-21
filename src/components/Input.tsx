@@ -1,6 +1,6 @@
 export interface Props extends React.ComponentPropsWithoutRef<"input"> {}
 
-export default function Input({ className, ...rest }: Props) {
+export function Input({ className, ...rest }: Props) {
     return (
         <input
             className={`

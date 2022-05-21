@@ -1,30 +1,19 @@
-import { GetServerSideProps } from "next";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
+import { GetServerSideProps } from "next";
+
 import axios from "../../lib/axios";
 import { Task } from "@prisma/client";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
-import { FaSearch, FaTrash } from "react-icons/fa";
-import { GrCopy } from "react-icons/gr";
-import Header from "@/components/Header";
-import Link from "next/link";
-import Button from "@/components/Button";
-import Input from "@/components/Input";
-import TextArea from "@/components/TextArea";
-import { SearchCircleIcon } from "@heroicons/react/outline";
+import { FaTrash } from "react-icons/fa";
 import { AiFillCopy } from "react-icons/ai";
-import InputButton from "@/components/InputButton";
-import { FcDocument } from "react-icons/fc";
-import { NewTaskModal as NewTaskModal } from "@/components/NewTaskModal";
 import { Session } from "next-auth";
+import { Header, NewTaskModal, InputButton } from "@/components/Index";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession({ req: context.req });
 
-    console.log("dashboard:server:session::", session);
     if (!session) {
         return {
             redirect: {
@@ -39,11 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-type Props = {
-    session: Session;
-};
-
-export default function App({ session }: Props) {
+export default function App() {
     const [searchTitle, setSearchTitle] = useState("");
 
     // const { data: session } = useSession();
@@ -84,26 +69,6 @@ export default function App({ session }: Props) {
         setSearch(true);
     }
 
-    // async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    //     e.preventDefault();
-
-    //     setSaving(true);
-    //     try {
-    //         const response = await axios.post("/tasks", {
-    //             title,
-    //         });
-
-    //         if (response) {
-    //             setSearch(true);
-    //             toast.success(`Tarefa foi salva com sucesso`);
-    //             setTitle("");
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //     } finally {
-    //         setSaving(false);
-    //     }
-    // }
     async function handleDelete(id: string) {
         setDeleting(true);
         try {
@@ -161,7 +126,9 @@ export default function App({ session }: Props) {
                                     <textarea
                                         disabled
                                         value={task.title}
-                                        className="-scroll-mt-2 block p-4 h-16 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                                        className="  scrollbar-thin
+                                        scrollbar-track-green-50
+                                        scrollbar-thumb-green-500 block p-4 h-16 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                                     ></textarea>
 
                                     <div className=" flex justify-between mb-6 p-2 text-slate-400 text-base ">

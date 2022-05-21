@@ -4,11 +4,7 @@ export interface Props extends React.ComponentPropsWithoutRef<"input"> {
     titleButton: string;
 }
 
-export default function InputButton({
-    className,
-    titleButton,
-    ...rest
-}: Props) {
+export function InputButton({ className, titleButton, ...rest }: Props) {
     return (
         <div className="relative ">
             <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">

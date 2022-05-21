@@ -1,11 +1,10 @@
 import Modal from "react-modal";
-import { FormEvent, useEffect, useState } from "react";
-import { GrClose } from "react-icons/gr";
-import TextArea from "./TextArea";
-import Button from "./Button";
-import axios from "@/lib/axios";
+import { useEffect, useState } from "react";
+import { TextArea } from "./TextArea";
+import { Button } from "./Button";
 import { FaTasks } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
+import axios from "@/lib/axios";
 
 type PropsType = {
     handleSetSearch: () => void;

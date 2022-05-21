@@ -1,8 +1,8 @@
+import { Fragment } from "react";
+import Image from "next/image";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-import { Fragment } from "react";
 import imageLogoUrl from "../../public/assets/logo.png";
 
 const navigation = [
@@ -15,7 +15,7 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function Header() {
+export function Header() {
     const { data: session } = useSession();
 
     function Logoff() {

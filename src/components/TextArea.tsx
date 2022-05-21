@@ -1,9 +1,14 @@
 export interface Props extends React.ComponentPropsWithoutRef<"textarea"> {}
 
-export default function TextArea({ className, ...rest }: Props) {
+export function TextArea({ className, ...rest }: Props) {
     return (
         <textarea
             className={`
+
+                scrollbar-thin
+                scrollbar-track-green-50
+                scrollbar-thumb-green-500
+
                 outline-none
                 block 
                 p-4 
