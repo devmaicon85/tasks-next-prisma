@@ -127,8 +127,8 @@ export default function App() {
                                         disabled
                                         value={task.title}
                                         className="  scrollbar-thin
-                                        scrollbar-track-green-50
-                                        scrollbar-thumb-green-500 block p-4 h-16 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
+                                        scrollbar-track-slate-50
+                                        scrollbar-thumb-slate-300 block p-4 h-16 w-full text-sm text-gray-900  rounded-md border border-gray-100 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
                                     ></textarea>
 
                                     <div className=" flex justify-between mb-6 p-2 text-slate-400 text-base ">

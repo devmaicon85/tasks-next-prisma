@@ -1,4 +1,4 @@
-export interface Props extends React.ComponentPropsWithoutRef<"textarea"> {}
+interface Props extends React.ComponentPropsWithoutRef<"textarea"> {}
 
 export function TextArea({ className, ...rest }: Props) {
     return (

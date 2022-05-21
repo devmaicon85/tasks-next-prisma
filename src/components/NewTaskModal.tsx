@@ -90,9 +90,9 @@ export function NewTaskModal({ handleSetSearch }: PropsType) {
 
                                     <div className="mt-4 flex justify-end">
                                         <div>
-                                            <Button type="submit" className="">
+                                            <Button type="submit">
                                                 {!saving
-                                                    ? "Salvar Tarefa"
+                                                    ? "Salvar"
                                                     : "Salvando..."}
                                             </Button>
                                         </div>
