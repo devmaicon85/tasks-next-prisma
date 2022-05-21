@@ -13,7 +13,7 @@ import imageLogoUrl from "../../public/assets/logo.png";
 import { Button, Input } from "@/components/Index";
 
 import { hash } from "bcryptjs";
-import { DarkTheme } from "@/components/DarkTheme";
+import { ThemeButton } from "@/components/ThemeButton";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req });
@@ -102,7 +102,7 @@ export default function Login() {
                     ></Image>
                 </div>
                 <div className="flex self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
-                    Efetue o Login <DarkTheme className="ml-2" />
+                    Efetue o Login <ThemeButton className="ml-2" />
                 </div>
                 {status === "authenticated" && (
                     <p className="text-sm">você está autenticado</p>

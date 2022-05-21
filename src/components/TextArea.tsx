@@ -5,9 +5,9 @@ export function TextArea({ className, ...rest }: Props) {
         <textarea
             className={`
 
-                scrollbar-thin
                 scrollbar-track-green-50
                 scrollbar-thumb-green-500
+                scrollbar-thin
 
                 outline-none
                 block 
@@ -32,6 +32,7 @@ export function TextArea({ className, ...rest }: Props) {
                 dark:focus:ring-green-500 
                 dark:focus:border-green-500
                 ${className}
+
             `}
             {...rest}
         ></textarea>

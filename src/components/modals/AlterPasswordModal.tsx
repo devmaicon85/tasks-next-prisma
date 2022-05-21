@@ -14,7 +14,7 @@ type PropsType = {
     setIsOpen: (open: boolean) => void;
     isOpen: boolean;
 };
-export function ConfigurationModal({
+export function AlterPasswordModal({
     handleFinally,
     setIsOpen,
     isOpen,

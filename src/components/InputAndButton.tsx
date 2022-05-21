@@ -6,7 +6,7 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
     titleButton: string;
 }
 
-export function InputButton({ className, titleButton, ...rest }: Props) {
+export function InputAndButton({ className, titleButton, ...rest }: Props) {
     return (
         <div className="relative ">
             <div className="flex absolute inset-y-0  items-center pl-3 pointer-events-none">

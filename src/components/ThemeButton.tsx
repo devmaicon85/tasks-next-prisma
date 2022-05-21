@@ -6,7 +6,7 @@ import { MdDarkMode, MdOutlineDarkMode } from "react-icons/md";
 type Props = {
     className?: string;
 };
-export function DarkTheme({ className }: Props) {
+export function ThemeButton({ className }: Props) {
     const [dark, setDark] = useState(false);
 
     useEffect(() => {

@@ -4,8 +4,8 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import imageLogoUrl from "../../public/assets/logo.png";
-import { ConfigurationModal } from "./modals/ConfigurationModal";
-import { DarkTheme } from "./DarkTheme";
+import { AlterPasswordModal } from "./modals/AlterPasswordModal";
+import { ThemeButton } from "./ThemeButton";
 
 const navigation = [
     { name: "Home", href: "#", current: true },
@@ -30,7 +30,7 @@ export function Header() {
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
                 <>
-                    <ConfigurationModal
+                    <AlterPasswordModal
                         handleFinally={() => {}}
                         setIsOpen={setIsOpenModalConfig}
                         isOpen={isOpenModalConfig}
@@ -102,7 +102,7 @@ export function Header() {
                                         aria-hidden="true"
                                     />
                                 </button>
-                                <DarkTheme className="h-8 w-8 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" />
+                                <ThemeButton className="h-8 w-8 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" />
 
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="ml-3 relative">

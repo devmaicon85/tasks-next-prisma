@@ -1,6 +1,6 @@
 export * from "./Button";
 export * from "./Header";
 export * from "./Input";
-export * from "./InputButton";
+export * from "./InputAndButton";
 export * from "./TextArea";
 export * from "./ModalBase";

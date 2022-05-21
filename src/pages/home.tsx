@@ -1,4 +1,4 @@
-import { DarkTheme } from "@/components/DarkTheme";
+import { ThemeButton } from "@/components/ThemeButton";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export default function Home() {
                 <div className="flex flex-col justify-center items-center">
                     <div className="flex m-4 mb-0 justify-center items-center text-3xl min-w-[280px] ">
                         Tasks Plataform
-                        <DarkTheme className="mb-6" />
+                        <ThemeButton className="mb-6" />
                     </div>
                     <div className="flex">
                         <Link href="/login">
@@ -34,7 +34,9 @@ export default function Home() {
                                 onClick={() => setLoading(true)}
                                 className="text-base hover:scale-125 ease-out duration-1000"
                             >
-                                {loading ? "Carregando..." : "Efetuar login"}
+                                {loading
+                                    ? "Carregando..."
+                                    : "Acessar Plataforma"}
                             </a>
                         </Link>
                     </div>
