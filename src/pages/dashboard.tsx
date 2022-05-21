@@ -13,7 +13,7 @@ import {
     Button,
     TextArea,
     ButtonMiniIcon,
-    NewTaskModal,
+    CrudModal,
 } from "@/components/Index";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -38,12 +38,17 @@ export type DataEditType = {
     title?: string;
 };
 
+export type typeSubmitCrudType = "new" | "edit" | "delete";
+
 export default function App() {
     const [searchText, setSearchText] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [search, setSearch] = useState(false);
     const [dataEdit, setDataEdit] = useState<DataEditType>();
+
+    const [search, setSearch] = useState(false);
+
     const [data, setData] = useState<Task[]>([]);
+    const [typeSubmit, setTypeSubmit] = useState<typeSubmitCrudType>("new");
 
     useEffect(() => {
         setSearch(true);
@@ -77,22 +82,23 @@ export default function App() {
     }
 
     async function handleDeleteData({ id, title }: Task) {
-        // const response = await axios.delete(`/tasks?id=${task.id}`);
-        // if (response) {
-        //     setSearch(true);
-        //     toast.success(`Registro deletado com sucesso`);
-        // }
+        setTypeSubmit("delete");
         setDataEdit({ id, title });
+
         setIsOpenModal(true);
     }
 
     async function handleAlterData({ id, title }: DataEditType) {
+        setTypeSubmit("edit");
         setDataEdit({ id, title });
+
         setIsOpenModal(true);
     }
 
     async function handleNewData() {
+        setTypeSubmit("new");
         setDataEdit(undefined);
+
         setIsOpenModal(true);
     }
 
@@ -100,7 +106,9 @@ export default function App() {
         <div className="flex flex-col h-screen w-screen dark:bg-slate-900 dark:text-white text-slate-700 ">
             <Header />
             <Toaster position="bottom-center" />
-            <NewTaskModal
+            <CrudModal
+                endPoint="/tasks"
+                typeSubmit={typeSubmit}
                 data={dataEdit}
                 setData={setDataEdit}
                 setIsOpen={setIsOpenModal}

@@ -45,8 +45,6 @@ export async function createTask(
     const { title, id } = req.body;
     // const { query } = req.query;
 
-    console.log("createTask:::", id);
-    console.log("createTask:::", title);
     if (!session.user.id)
         return res
             .status(500)

@@ -6,4 +6,4 @@ export * from "./InputAndButton";
 export * from "./TextArea";
 export * from "./ModalBase";
 export * from "./modals/AlterPasswordModal";
-export * from "./modals/NewTaskModal";
+export * from "./modals/CrudModal";

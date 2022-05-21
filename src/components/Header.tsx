@@ -8,9 +8,9 @@ import { AlterPasswordModal } from "./modals/AlterPasswordModal";
 import { ThemeButton } from "./ThemeButton";
 
 const navigation = [
-    { name: "Home", href: "#", current: true },
-    { name: "Tarefas", href: "#", current: false },
-    { name: "Projetos", href: "#", current: false },
+    { name: "Home", href: "", current: true },
+    { name: "Tarefas", href: "", current: false },
+    { name: "Projetos", href: "", current: false },
 ];
 
 function classNames(...classes: string[]) {

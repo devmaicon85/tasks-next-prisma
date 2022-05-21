@@ -8,7 +8,6 @@ export function ButtonMiniIcon({ children, className, ...rest }: ButtonProps) {
     return (
         <Button
             {...rest}
-            title="alterar"
             className={`
                         bg-transparent 
                         hover:bg-transparent 
