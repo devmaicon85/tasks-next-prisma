@@ -5,12 +5,7 @@ import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 const secret = process.env.NEXTAUTH_SECRET;
 
-import {
-    createTask,
-    deleteTask,
-    getAllTasks,
-    updateTask,
-} from "@/lib/api/tasks";
+import { createTask, deleteTask, getAllTasks } from "@/lib/api/tasks";
 import { authOptions } from "./auth/[...nextauth]";
 
 async function index(req: NextApiRequest, res: NextApiResponse) {
@@ -32,14 +27,14 @@ async function index(req: NextApiRequest, res: NextApiResponse) {
             return await deleteTask(req, res, session);
         case HttpMethod.GET:
             return await getAllTasks(req, res, session);
-        case HttpMethod.PUT:
-            return await updateTask(req, res, session);
+        // case HttpMethod.PUT:
+        //     return await updateTask(req, res, session);
 
         default:
             res.setHeader("Allow", [
                 HttpMethod.GET,
                 HttpMethod.POST,
-                HttpMethod.PUT,
+                // HttpMethod.PUT,
                 HttpMethod.DELETE,
             ]);
             return res.status(405).end(`Method ${req.method} Not Allowed`);

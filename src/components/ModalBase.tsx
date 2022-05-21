@@ -24,7 +24,7 @@ export function ModalBase({
         <Modal
             isOpen={isOpen}
             onRequestClose={() => setIsOpen(false)}
-            // overlayClassName="react-modal-overlay"
+            overlayClassName="react-modal-overlay"
             className="react-modal-content"
         >
             <div className="py-12 bg-slate-800  transition duration-1000 ease-in-out z-20 absolute top-0 right-0 bottom-0 left-0">
