@@ -113,7 +113,7 @@ export default function App() {
                     setSearch(true);
                 }}
             />
-            <div className="flex flex-col h-screen w-screen dark:bg-slate-900 dark:text-white text-slate-700 ">
+            <div className="flex flex-col  w-screen  ">
                 <Header />
                 <Toaster position="bottom-center" />
 
