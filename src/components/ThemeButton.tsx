@@ -49,8 +49,8 @@ export function ThemeButton({ className }: Props) {
             } `}
             onClick={onAlterTheme}
             className={`
-                    w-10
-                    h-10
+                    w-6
+                    h-6
                     cursor-pointer 
                     text-2xl 
                     flex
