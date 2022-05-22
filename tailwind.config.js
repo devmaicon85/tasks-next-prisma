@@ -6,17 +6,25 @@ module.exports = {
     darkMode: "class",
 
     theme: {
-        defaultTheme: {},
-        fontFamily: {
-            cal: ["Cal Sans", "Inter var", "sans-serif"],
-        },
+        // defaultTheme: {},
+
         extend: {
             colors: {
-                current: "currentColor",
-            },
-            fontFamily: {
-                sans: ["Inter var", ...defaultTheme.fontFamily.sans],
-                mono: ["Consolas", ...defaultTheme.fontFamily.mono],
+                theme: {
+                    white: "#FFF",
+
+                    light: {
+                        brand: "green",
+                        background: {
+                            brand: "#E5E5E5",
+                            input: "#F9F9FB",
+                        },
+                        text: {
+                            brand: "#1B1B1B",
+                            secondary: "#6A7D8B",
+                        },
+                    },
+                },
             },
         },
     },

@@ -137,7 +137,6 @@ export default function Login() {
                                     className="rounded-l-none"
                                     type="password"
                                     autoComplete=""
-                                    //className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                                     placeholder="Password"
                                     onChange={(e) =>
                                         setPassword(e.target.value)

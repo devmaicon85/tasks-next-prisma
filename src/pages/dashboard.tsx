@@ -5,7 +5,7 @@ import axios from "../lib/axios";
 import { Task } from "@prisma/client";
 import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
-import { AiFillCopy, AiFillEdit } from "react-icons/ai";
+import { AiFillCopy, AiFillEdit, AiOutlinePlus } from "react-icons/ai";
 import { FcPlus } from "react-icons/fc";
 import {
     Header,
@@ -120,7 +120,7 @@ export default function App() {
                 <div className="max-w-4xl px-5 mx-auto w-screen mt-10  ">
                     <div className="mb-5">
                         <Button type="button" onClick={handleNewData}>
-                            <FcPlus className="text-2xl" /> Incluir Novo
+                            <AiOutlinePlus className="text-2xl" /> Incluir Novo
                         </Button>
                     </div>
 

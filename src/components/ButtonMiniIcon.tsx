@@ -6,9 +6,21 @@ interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
 
 export function ButtonMiniIcon({ children, className, ...rest }: ButtonProps) {
     return (
-        <Button
+        <button
             {...rest}
             className={`
+                        flex 
+                        gap-2 
+                        justify-center 
+                        items-center
+                        px-4 
+                        text-base 
+                        font-medium
+                        transition ease-in duration-75 flex-1 
+                        focus:outline-none 
+                        rounded-[4px]
+                        dark:hover:brightness-90 
+                        dark:focus:ring-slate-600
                         bg-transparent 
                         hover:bg-transparent 
                         dark:bg-transparent
@@ -17,12 +29,12 @@ export function ButtonMiniIcon({ children, className, ...rest }: ButtonProps) {
                         focus:ring-2
                         focus:ring-slate-500
                         h-5
-
                         hover:scale-125  
+
                         ${className}
             `}
         >
             {children}
-        </Button>
+        </button>
     );
 }
