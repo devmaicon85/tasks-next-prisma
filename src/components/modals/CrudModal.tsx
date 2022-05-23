@@ -3,14 +3,16 @@ import { FaTasks } from "react-icons/fa";
 import { Button, ModalBase, TextArea } from "@/components/Index";
 import axios from "@/lib/axios";
 import toast from "react-hot-toast";
-import { TypeSubmitCrud } from "pages/dashboard";
+import { BsFillSave2Fill } from "react-icons/bs";
+import { AiFillDelete, AiFillSave } from "react-icons/ai";
+
+export type TypeSubmitCrud = "new" | "edit" | "delete";
 
 type PropsType = {
     handleFinally: () => void;
     setIsOpen: (open: boolean) => void;
     isOpen: boolean;
     data?: any;
-    // setData: (data: any) => void;
     typeSubmit: TypeSubmitCrud;
     endPoint: string;
     children: React.ReactElement;
@@ -20,7 +22,6 @@ export function CrudModal({
     setIsOpen,
     isOpen,
     data,
-    // setData,
     typeSubmit,
     endPoint,
     children,
@@ -37,7 +38,7 @@ export function CrudModal({
             ? "Inserindo Registro"
             : typeSubmit === "edit"
             ? "Editando Registro"
-            : "Deseja excluir esse registro?";
+            : "Excluir o registro?";
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -84,6 +85,14 @@ export function CrudModal({
                     <div className="mt-4 flex justify-end">
                         <div>
                             <Button
+                                icon={
+                                    typeSubmit === "new" ||
+                                    typeSubmit === "edit" ? (
+                                        <AiFillSave />
+                                    ) : (
+                                        <AiFillDelete />
+                                    )
+                                }
                                 type="submit"
                                 className={
                                     typeSubmit === "delete"

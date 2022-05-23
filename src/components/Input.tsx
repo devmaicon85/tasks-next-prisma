@@ -1,9 +1,18 @@
-interface Props extends React.ComponentPropsWithoutRef<"input"> {}
+interface Props extends React.ComponentPropsWithoutRef<"input"> {
+    icon?: React.ReactNode;
+}
 
-export function Input({ className, ...rest }: Props) {
+export function Input({ className, icon, ...rest }: Props) {
     return (
-        <input
-            className={`
+        <>
+            {icon && (
+                <span className="rounded-l-md inline-flex  dark:bg-gray-600 dark:border-gray-600 items-center px-3 border-t border-l border-b bg-white  border-theme-light-background-brand text-gray-500 shadow-sm text-sm">
+                    {icon}
+                </span>
+            )}
+
+            <input
+                className={`
                 outline-none
                 block 
                 p-4 
@@ -11,9 +20,9 @@ export function Input({ className, ...rest }: Props) {
                 text-sm 
                 border
                 border-theme-light-background-brand
+                bg-theme-light-background-input
 
                 text-gray-900 
-                bg-theme-light-background-input
                 rounded-sm
                 hover:border-theme-light-brand
                 placeholder:opacity-70
@@ -28,7 +37,8 @@ export function Input({ className, ...rest }: Props) {
                 dark:focus:border-theme-light-brand
                 ${className}
             `}
-            {...rest}
-        />
+                {...rest}
+            />
+        </>
     );
 }

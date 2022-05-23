@@ -4,7 +4,7 @@ import { TextArea } from "../TextArea";
 import { Button } from "../Button";
 import { FaTasks } from "react-icons/fa";
 import axios from "@/lib/axios";
-import { ModalBase } from "../ModalBase";
+import { ModalBase } from "./ModalBase";
 import { HiAdjustments } from "react-icons/hi";
 import { Input } from "../Input";
 import toast from "react-hot-toast";
@@ -14,27 +14,35 @@ type PropsType = {
     setIsOpen: (open: boolean) => void;
     isOpen: boolean;
 };
-export function AlterPasswordModal({
+export function UserPasswordModal({
     handleFinally,
     setIsOpen,
     isOpen,
 }: PropsType) {
     const [password, setPassword] = useState("");
     const [saving, setSaving] = useState(false);
+    const [msgError, setMsgError] = useState("");
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
+        setMsgError("");
+
+        if (password.trim() === "") {
+            setMsgError("Senha não informada");
+            return;
+        }
+
         setSaving(true);
         try {
-            const response = await axios.post("/user", {
+            const response = await axios.put("/user", {
                 password,
             });
 
             if (response) {
                 handleFinally();
 
-                toast.success(`Configurações salvas com sucesso`);
+                toast.success(`Senha alterada com sucesso`);
                 setPassword("");
             }
         } catch (error) {
@@ -48,7 +56,7 @@ export function AlterPasswordModal({
     return (
         <>
             <ModalBase
-                title="Configurações"
+                title="Alterar Senha"
                 icon={<HiAdjustments className=" text-3xl " />}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
@@ -57,9 +65,11 @@ export function AlterPasswordModal({
                     <Input
                         autoFocus
                         required
-                        placeholder="digite sua nova senha caso deseja alterar"
+                        type="password"
+                        placeholder="informa nova senha"
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    <div>{msgError}</div>
 
                     <div className="mt-4 flex justify-end">
                         <div>

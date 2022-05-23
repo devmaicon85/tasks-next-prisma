@@ -2,9 +2,8 @@ import prismaClient from "@/lib/prismaClient";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession, Session } from "next-auth";
-import { authOptions } from "pages/api/auth/[...nextauth]";
 
-export async function getAllTasks(
+export async function searchTasks(
     req: NextApiRequest,
     res: NextApiResponse,
     session: Session
@@ -18,20 +17,24 @@ export async function getAllTasks(
                 .end("O servidor falhou ao obter o ID do usuário da sessão");
 
         if (Array.isArray(search)) {
-            return res.status(400).end("Título inválido");
+            return res.status(400).end("Busca inválida");
         }
 
         const data = await prismaClient.task.findMany({
             where: {
                 userId: session.user.id,
-                OR: {
-                    title: {
-                        contains: search,
+                OR: [
+                    {
+                        title: {
+                            contains: search.replace(" ", "%"),
+                        },
                     },
-                    description: {
-                        contains: search,
+                    {
+                        description: {
+                            contains: search.replace(" ", "%"),
+                        },
                     },
-                },
+                ],
             },
             orderBy: { createdAt: "desc" },
         });
@@ -42,42 +45,37 @@ export async function getAllTasks(
     }
 }
 
-export async function createTask(
+export async function updateCreateTask(
     req: NextApiRequest,
     res: NextApiResponse,
     session: Session
 ) {
-    const { title, description, id } = req.body;
-    // const { query } = req.query;
+    const { title, description, id, isPublic } = req.body;
 
     if (!session.user.id)
         return res
             .status(500)
             .end("O servidor falhou ao obter o ID do usuário da sessão");
 
-    if (title === "") return res.status(400).end("Título inválido");
+    if (title.trim() === "" || description.trim() === "")
+        return res.status(400).end("Título não informado");
 
     try {
-        // ALTERANDO
-        if (id) {
-            const data = await prismaClient.task.update({
-                data: {
-                    title,
-                    description,
-                    userId: session.user.id,
-                },
-                where: { id },
-            });
-            return res.status(200).json(data);
-        }
-
-        // CRIANDO
-        const data = await prismaClient.task.create({
-            data: {
+        // CRIA OU ALTERA SE EXISTIR
+        const data = await prismaClient.task.upsert({
+            create: {
                 title,
                 description,
+                isPublic,
                 userId: session.user.id,
             },
+            update: {
+                title,
+                description,
+                isPublic,
+                userId: session.user.id,
+            },
+            where: { id },
         });
         return res.status(200).json(data);
     } catch (error) {

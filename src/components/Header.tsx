@@ -4,7 +4,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import imageLogoUrl from "../../public/assets/logo.png";
-import { AlterPasswordModal } from "./modals/AlterPasswordModal";
+import { UserPasswordModal } from "./modals/UserPasswordModal";
 import { ThemeButton } from "./ThemeButton";
 
 const navigation = [
@@ -20,7 +20,7 @@ function classNames(...classes: string[]) {
 export function Header() {
     const { data: session } = useSession();
 
-    const [isOpenModalConfig, setIsOpenModalConfig] = useState(false);
+    const [isOpenModalPassword, setIsOpenModalPassword] = useState(false);
 
     function Logoff() {
         signOut({ redirect: true });
@@ -30,10 +30,10 @@ export function Header() {
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
                 <>
-                    <AlterPasswordModal
+                    <UserPasswordModal
                         handleFinally={() => {}}
-                        setIsOpen={setIsOpenModalConfig}
-                        isOpen={isOpenModalConfig}
+                        setIsOpen={setIsOpenModalPassword}
+                        isOpen={isOpenModalPassword}
                     />
                     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 z-10">
                         <div className="relative flex items-center justify-between h-16">
@@ -135,7 +135,6 @@ export function Header() {
                                             <Menu.Item>
                                                 {({ active }) => (
                                                     <a
-                                                        href="#"
                                                         className={classNames(
                                                             active
                                                                 ? "bg-gray-100"
@@ -152,7 +151,7 @@ export function Header() {
                                                 {({ active }) => (
                                                     <a
                                                         onClick={() =>
-                                                            setIsOpenModalConfig(
+                                                            setIsOpenModalPassword(
                                                                 true
                                                             )
                                                         }
@@ -164,7 +163,7 @@ export function Header() {
                                                             "block px-4 py-2 text-sm text-gray-700"
                                                         )}
                                                     >
-                                                        Configurações
+                                                        Alterar Senha
                                                     </a>
                                                 )}
                                             </Menu.Item>

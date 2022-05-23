@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { GetServerSideProps } from "next";
 import axios from "../lib/axios";
 import { Task } from "@prisma/client";
 import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
-import { AiFillCopy, AiFillEdit, AiOutlinePlus } from "react-icons/ai";
+import {
+    AiFillCopy,
+    AiFillEdit,
+    AiOutlineFileSearch,
+    AiOutlinePlusCircle,
+} from "react-icons/ai";
+
+import { RiGitRepositoryPrivateLine } from "react-icons/ri";
+
+import { CgSearch } from "react-icons/cg";
 import {
     Header,
     InputAndButton,
@@ -14,7 +23,11 @@ import {
     ButtonMiniIcon,
     CrudModal,
     Input,
+    TypeSubmitCrud,
+    Checkbox,
 } from "@/components/Index";
+import Link from "next/link";
+import { MdOutlineManageSearch, MdOutlinePublic } from "react-icons/md";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession({ req: context.req });
@@ -33,29 +46,37 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-export type DataType = {
+export type DataTasksType = {
     id: string | null;
     title: string | null;
     description: string | null;
+    isPublic: boolean | false;
 };
 
-export type TypeSubmitCrud = "new" | "edit" | "delete";
-
 export default function App() {
+    const { data: session } = useSession();
+
     const [searchText, setSearchText] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [search, setSearch] = useState(false);
     const [data, setData] = useState<Task[]>([]);
-    const [dataEdit, setDataEdit] = useState<DataType>({
+
+    const searchParams = new URLSearchParams(
+        typeof window === "undefined" ? "" : window.location.search
+    );
+
+    const [taskEdit, setTaskEdit] = useState<DataTasksType>({
         id: "",
         title: "",
         description: "",
+        isPublic: false,
     });
     const [typeSubmit, setTypeSubmit] = useState<TypeSubmitCrud>("new");
 
     useEffect(() => {
         setSearch(true);
     }, []);
+
     useEffect(() => {
         async function getSearch() {
             if (search === false) {
@@ -84,24 +105,18 @@ export default function App() {
         toast.success(`Copiado para area de transferência`);
     }
 
-    async function handleDeleteData(data: DataType) {
-        setTypeSubmit("delete");
-        setDataEdit(data);
-
-        setIsOpenModal(true);
-    }
-
-    async function handleAlterData(data: DataType) {
-        setTypeSubmit("edit");
-        setDataEdit(data);
-
-        setIsOpenModal(true);
-    }
-
-    async function handleNewData() {
-        setTypeSubmit("new");
-        setDataEdit({ id: "", title: "", description: "" });
-
+    async function openModalCrud(
+        type: TypeSubmitCrud,
+        data: DataTasksType = {
+            id: "",
+            title: "",
+            description: "",
+            isPublic: false,
+        }
+    ) {
+        // abre o modal com os dados
+        setTypeSubmit(type);
+        setTaskEdit(data);
         setIsOpenModal(true);
     }
 
@@ -110,7 +125,7 @@ export default function App() {
             <CrudModal
                 endPoint="/tasks"
                 typeSubmit={typeSubmit}
-                data={dataEdit}
+                data={taskEdit}
                 setIsOpen={setIsOpenModal}
                 isOpen={isOpenModal}
                 handleFinally={() => {
@@ -124,15 +139,15 @@ export default function App() {
                         required
                         placeholder="título do registro..."
                         onChange={(e) =>
-                            setDataEdit({
-                                ...dataEdit,
+                            setTaskEdit({
+                                ...taskEdit,
                                 title: String(e.target.value),
                             })
                         }
-                        value={String(dataEdit?.title)}
+                        value={String(taskEdit?.title)}
                     />
 
-                    <div className="h-3"></div>
+                    <div className="h-2"></div>
 
                     <TextArea // description
                         rows={4}
@@ -140,13 +155,30 @@ export default function App() {
                         required
                         placeholder="descrição do registro..."
                         onChange={(e) =>
-                            setDataEdit({
-                                ...dataEdit,
+                            setTaskEdit({
+                                ...taskEdit,
                                 description: String(e.target.value),
                             })
                         }
-                        value={String(dataEdit?.description)}
+                        value={String(taskEdit.description)}
                     />
+
+                    <div className="h-4"></div>
+
+                    <Checkbox
+                        checked={taskEdit.isPublic}
+                        onClick={(e) =>
+                            setTaskEdit({
+                                ...taskEdit,
+                                isPublic: Boolean(!taskEdit.isPublic),
+                            })
+                        }
+                    >
+                        É público?{" "}
+                        <div className="text-xs">
+                            será exibido na busca da api pública
+                        </div>
+                    </Checkbox>
                 </>
             </CrudModal>
             <div className="flex flex-col  w-screen  ">
@@ -155,39 +187,65 @@ export default function App() {
 
                 <div className="max-w-4xl px-5 mx-auto w-screen mt-10  ">
                     <div className="mb-5">
-                        <Button type="button" onClick={handleNewData}>
-                            <AiOutlinePlus className="text-2xl" /> Incluir Novo
+                        <Button
+                            icon={<AiOutlinePlusCircle className="text-2xl" />}
+                            type="button"
+                            onClick={() => openModalCrud("new")}
+                        >
+                            Incluir Novo
                         </Button>
                     </div>
-
                     <form className="mb-5" onSubmit={handleSearchSubmit}>
                         <InputAndButton
+                            iconInput={<MdOutlineManageSearch />}
+                            iconButton={<CgSearch />}
                             titleButton={`Pesquisar ${search ? "..." : ""}`}
                             placeholder="Buscar Registros"
                             onChange={(e) => setSearchText(e.target.value)}
                         />
                     </form>
-
+                    {data.length > 0 && (
+                        <div className="text-sm w-full mb-3 justify-end flex">
+                            <Link
+                                href={`${searchParams}/api/public/tasks?key=${session?.user.id}&search=`}
+                                passHref
+                            >
+                                <a target="_blank" className="hover:underline">
+                                    Acessar api pública para acesso externo
+                                </a>
+                            </Link>
+                        </div>
+                    )}
                     {data &&
-                        data.map((item, index) => (
+                        data.map((task, index) => (
                             <div key={index}>
-                                <div className="dark:bg-slate-800  bg-slate-200 rounded-lg ">
-                                    <div className="">
-                                        <Input
-                                            disabled
-                                            className="border-0"
-                                            value={item.title}
-                                        ></Input>
+                                <div className="dark:bg-slate-800 justify-center  bg-slate-200 rounded-lg ">
+                                    <div>
+                                        <div className="flex ">
+                                            <Input
+                                                disabled
+                                                className="border-0"
+                                                value={task.title}
+                                            />
+                                            <div className=" text-theme-light-text-secondary bg-transparent h-auto w-10 flex justify-center items-center">
+                                                {task.isPublic ? (
+                                                    <MdOutlinePublic title="público" />
+                                                ) : (
+                                                    <RiGitRepositoryPrivateLine title="privado" />
+                                                )}
+                                            </div>
+                                        </div>
                                         <TextArea
+                                            cols={1}
                                             disabled
                                             className="border-0"
-                                            value={item.description ?? ""}
+                                            value={task.description ?? ""}
                                         ></TextArea>
                                     </div>
 
                                     <div className=" flex justify-between  mb-2 p-2  text-base ">
                                         <span className="text-xs opacity-50">
-                                            {item.createdAt &&
+                                            {task.createdAt &&
                                                 new Intl.DateTimeFormat(
                                                     "pt-BR",
                                                     {
@@ -195,7 +253,7 @@ export default function App() {
                                                         timeStyle: "short",
                                                     }
                                                 ).format(
-                                                    new Date(item.createdAt)
+                                                    new Date(task.createdAt)
                                                 )}
                                         </span>
 
@@ -205,7 +263,7 @@ export default function App() {
                                                 className="hover:text-green-500"
                                                 onClick={() =>
                                                     handleCopyText(
-                                                        String(item.description)
+                                                        String(task.description)
                                                     )
                                                 }
                                             >
@@ -216,7 +274,7 @@ export default function App() {
                                                 title="Alterar"
                                                 className="hover:text-blue-500"
                                                 onClick={() =>
-                                                    handleAlterData(item)
+                                                    openModalCrud("edit", task)
                                                 }
                                             >
                                                 <AiFillEdit className="text-xl" />
@@ -226,7 +284,10 @@ export default function App() {
                                                 title="Deletar"
                                                 className="hover:text-red-500"
                                                 onClick={() =>
-                                                    handleDeleteData(item)
+                                                    openModalCrud(
+                                                        "delete",
+                                                        task
+                                                    )
                                                 }
                                             >
                                                 <FaTrash className="text-sm" />

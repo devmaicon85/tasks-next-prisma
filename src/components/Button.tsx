@@ -1,9 +1,11 @@
 interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
     children: React.ReactNode;
+    icon?: React.ReactNode;
 }
 
 export function Button({
     children,
+    icon,
     className,
 
     ...rest
@@ -16,7 +18,7 @@ export function Button({
                 px-4 
                 h-[42px]
 
-                text-base 
+                text-sm
                 font-medium
                 
                 focus:outline-none 
@@ -30,12 +32,13 @@ export function Button({
                 focus:ring-offset-1
                 focus:ring-opacity-70
                 
-                hover:scale-95 
+                hover:scale-[98%]
                 rounded-[4px]
                 transition ease-in duration-75 flex-1 
                 ${className}
             `}
         >
+            {icon}
             {children}
         </button>
     );

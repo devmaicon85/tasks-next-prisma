@@ -14,7 +14,7 @@ module.exports = {
                     white: "#FFF",
 
                     light: {
-                        brand: "green", //ff5727
+                        brand: "green",
                         danger: "rgb(239 68 68)",
 
                         background: {
@@ -22,8 +22,8 @@ module.exports = {
                             input: "#F9F9FB",
                         },
                         text: {
-                            brand: "#1B1B1B",
-                            secondary: "#6A7D8B",
+                            brand: "#0f172a",
+                            secondary: "#374151",
                         },
                     },
                 },

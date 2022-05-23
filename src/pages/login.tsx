@@ -56,15 +56,12 @@ export default function Login() {
         setIsLogging(true);
         setLoginError("");
 
-        console.log("password", await hash(password, 12));
         const status: any = await signIn("credentials", {
             email,
             password,
             callbackUrl: `${window.location.origin}/dashboard`,
             redirect: false,
         });
-
-        console.log("status login", status);
 
         if (status?.error) {
             setLoginError(status.error);
@@ -116,13 +113,12 @@ export default function Login() {
                     >
                         <div className="flex flex-col mb-2">
                             <div className="flex relative ">
-                                <span className="rounded-l-md inline-flex  dark:bg-gray-600 dark:border-gray-500 items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
-                                    <MdOutlineAlternateEmail />
-                                </span>
                                 <Input
+                                    icon={<MdOutlineAlternateEmail />}
                                     className="rounded-l-none "
-                                    type="text"
+                                    type="email"
                                     autoComplete=""
+                                    required
                                     placeholder="E-mail"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -130,12 +126,11 @@ export default function Login() {
                         </div>
                         <div className="flex flex-col mb-6">
                             <div className="flex relative ">
-                                <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white  dark:bg-gray-600 dark:border-gray-500 border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
-                                    <FaLock />
-                                </span>
                                 <Input
+                                    icon={<FaLock />}
                                     className="rounded-l-none"
                                     type="password"
+                                    required
                                     autoComplete=""
                                     placeholder="Password"
                                     onChange={(e) =>
