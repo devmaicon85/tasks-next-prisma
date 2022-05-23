@@ -270,9 +270,9 @@ export default function Erro404() {
                                 </defs>
                             </svg>
                         </div>
-                        <p className="flex justify-center text-xl md:text-3xl text-green-500 p-2 mb-4">
+                        <div className="flex justify-center text-xl md:text-3xl text-green-500 p-2 mb-4">
                             Página não encontrada <ThemeButton />
-                        </p>
+                        </div>
                         <Link href="/">
                             <a className="bg-transparent bg-green-500 text-green-300 hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-green-300 hover:border-transparent">
                                 Voltar pra Home

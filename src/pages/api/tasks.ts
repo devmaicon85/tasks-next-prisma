@@ -12,7 +12,7 @@ import {
 } from "@/lib/api/tasks";
 import { authOptions } from "./auth/[...nextauth]";
 
-async function index(req: NextApiRequest, res: NextApiResponse) {
+export default async function tasks(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession({ req, res }, authOptions);
     if (!session) return res.status(401).end();
 
@@ -44,4 +44,3 @@ async function index(req: NextApiRequest, res: NextApiResponse) {
             return res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
-export default index;

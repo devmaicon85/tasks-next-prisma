@@ -6,7 +6,6 @@ import { Task } from "@prisma/client";
 import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 import { AiFillCopy, AiFillEdit, AiOutlinePlus } from "react-icons/ai";
-import { FcPlus } from "react-icons/fc";
 import {
     Header,
     InputAndButton,
@@ -14,6 +13,7 @@ import {
     TextArea,
     ButtonMiniIcon,
     CrudModal,
+    Input,
 } from "@/components/Index";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -33,20 +33,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-export type DataEditType = {
-    id?: string;
-    title?: string;
+export type DataType = {
+    id: string | null;
+    title: string | null;
+    description: string | null;
 };
 
-export type typeSubmitCrudType = "new" | "edit" | "delete";
+export type TypeSubmitCrud = "new" | "edit" | "delete";
 
 export default function App() {
     const [searchText, setSearchText] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [dataEdit, setDataEdit] = useState<DataEditType>();
     const [search, setSearch] = useState(false);
     const [data, setData] = useState<Task[]>([]);
-    const [typeSubmit, setTypeSubmit] = useState<typeSubmitCrudType>("new");
+    const [dataEdit, setDataEdit] = useState<DataType>({
+        id: "",
+        title: "",
+        description: "",
+    });
+    const [typeSubmit, setTypeSubmit] = useState<TypeSubmitCrud>("new");
 
     useEffect(() => {
         setSearch(true);
@@ -79,23 +84,23 @@ export default function App() {
         toast.success(`Copiado para area de transferência`);
     }
 
-    async function handleDeleteData({ id, title }: Task) {
+    async function handleDeleteData(data: DataType) {
         setTypeSubmit("delete");
-        setDataEdit({ id, title });
+        setDataEdit(data);
 
         setIsOpenModal(true);
     }
 
-    async function handleAlterData({ id, title }: DataEditType) {
+    async function handleAlterData(data: DataType) {
         setTypeSubmit("edit");
-        setDataEdit({ id, title });
+        setDataEdit(data);
 
         setIsOpenModal(true);
     }
 
     async function handleNewData() {
         setTypeSubmit("new");
-        setDataEdit(undefined);
+        setDataEdit({ id: "", title: "", description: "" });
 
         setIsOpenModal(true);
     }
@@ -106,13 +111,44 @@ export default function App() {
                 endPoint="/tasks"
                 typeSubmit={typeSubmit}
                 data={dataEdit}
-                setData={setDataEdit}
                 setIsOpen={setIsOpenModal}
                 isOpen={isOpenModal}
                 handleFinally={() => {
                     setSearch(true);
                 }}
-            />
+            >
+                <>
+                    <Input // title
+                        disabled={typeSubmit === "delete"}
+                        autoFocus
+                        required
+                        placeholder="título do registro..."
+                        onChange={(e) =>
+                            setDataEdit({
+                                ...dataEdit,
+                                title: String(e.target.value),
+                            })
+                        }
+                        value={String(dataEdit?.title)}
+                    />
+
+                    <div className="h-3"></div>
+
+                    <TextArea // description
+                        rows={4}
+                        disabled={typeSubmit === "delete"}
+                        required
+                        placeholder="descrição do registro..."
+                        onChange={(e) =>
+                            setDataEdit({
+                                ...dataEdit,
+                                description: String(e.target.value),
+                            })
+                        }
+                        value={String(dataEdit?.description)}
+                    />
+                </>
+            </CrudModal>
             <div className="flex flex-col  w-screen  ">
                 <Header />
                 <Toaster position="bottom-center" />
@@ -136,15 +172,20 @@ export default function App() {
                         data.map((item, index) => (
                             <div key={index}>
                                 <div className="dark:bg-slate-800  bg-slate-200 rounded-lg ">
-                                    <div className="m-1 p-1">
-                                        <TextArea
+                                    <div className="">
+                                        <Input
                                             disabled
                                             className="border-0"
                                             value={item.title}
+                                        ></Input>
+                                        <TextArea
+                                            disabled
+                                            className="border-0"
+                                            value={item.description ?? ""}
                                         ></TextArea>
                                     </div>
 
-                                    <div className=" flex justify-between  mb-3 p-2  text-base ">
+                                    <div className=" flex justify-between  mb-2 p-2  text-base ">
                                         <span className="text-xs opacity-50">
                                             {item.createdAt &&
                                                 new Intl.DateTimeFormat(
@@ -163,7 +204,9 @@ export default function App() {
                                                 title="Copiar"
                                                 className="hover:text-green-500"
                                                 onClick={() =>
-                                                    handleCopyText(item.title)
+                                                    handleCopyText(
+                                                        String(item.description)
+                                                    )
                                                 }
                                             >
                                                 <AiFillCopy className="text-base" />

@@ -24,8 +24,13 @@ export async function getAllTasks(
         const data = await prismaClient.task.findMany({
             where: {
                 userId: session.user.id,
-                title: {
-                    contains: search,
+                OR: {
+                    title: {
+                        contains: search,
+                    },
+                    description: {
+                        contains: search,
+                    },
                 },
             },
             orderBy: { createdAt: "desc" },
@@ -42,7 +47,7 @@ export async function createTask(
     res: NextApiResponse,
     session: Session
 ) {
-    const { title, id } = req.body;
+    const { title, description, id } = req.body;
     // const { query } = req.query;
 
     if (!session.user.id)
@@ -58,6 +63,7 @@ export async function createTask(
             const data = await prismaClient.task.update({
                 data: {
                     title,
+                    description,
                     userId: session.user.id,
                 },
                 where: { id },
@@ -69,6 +75,7 @@ export async function createTask(
         const data = await prismaClient.task.create({
             data: {
                 title,
+                description,
                 userId: session.user.id,
             },
         });

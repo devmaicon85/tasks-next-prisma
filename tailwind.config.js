@@ -14,7 +14,9 @@ module.exports = {
                     white: "#FFF",
 
                     light: {
-                        brand: "green",
+                        brand: "green", //ff5727
+                        danger: "rgb(239 68 68)",
+
                         background: {
                             brand: "#E5E5E5",
                             input: "#F9F9FB",
