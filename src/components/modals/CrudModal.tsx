@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { FaTasks } from "react-icons/fa";
-import { Button, ModalBase, TextArea } from "@/components/Index";
 import axios from "@/lib/axios";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { BsFillSave2Fill } from "react-icons/bs";
 import { AiFillDelete, AiFillSave } from "react-icons/ai";
+import { FaTasks } from "react-icons/fa";
+import { ModalBase } from "./ModalBase";
 
 export type TypeSubmitCrud = "new" | "edit" | "delete";
 
@@ -84,24 +83,24 @@ export function CrudModal({
 
                     <div className="mt-4 flex justify-end">
                         <div>
-                            <Button
-                                icon={
-                                    typeSubmit === "new" ||
-                                    typeSubmit === "edit" ? (
-                                        <AiFillSave />
-                                    ) : (
-                                        <AiFillDelete />
-                                    )
-                                }
+                            <button
                                 type="submit"
-                                className={
-                                    typeSubmit === "delete"
-                                        ? "bg-theme-light-danger"
-                                        : ""
-                                }
+                                className={` btn 
+                                    ${
+                                        typeSubmit === "delete"
+                                            ? "btn-danger"
+                                            : "btn-primary"
+                                    }
+                                `}
                             >
+                                {typeSubmit === "new" ||
+                                typeSubmit === "edit" ? (
+                                    <AiFillSave />
+                                ) : (
+                                    <AiFillDelete />
+                                )}
                                 {nameButton} {loading && "..."}
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 </form>

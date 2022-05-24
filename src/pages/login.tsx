@@ -1,19 +1,14 @@
-import { GetServerSideProps } from "next";
-import { getSession, signIn, useSession, signOut } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { FaGithub, FaGoogle, FaLock } from "react-icons/fa";
-import { MdOutlineAlternateEmail } from "react-icons/md";
-import { HiLogout } from "react-icons/hi";
-import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
-import Router, { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
-import Image from "next/image";
-import imageLogoUrl from "../../public/assets/logo.png";
-import { Button, Input } from "@/components/Index";
-
-import { hash } from "bcryptjs";
 import { ThemeButton } from "@/components/ThemeButton";
+import { GetServerSideProps } from "next";
+import { getSession, signIn, useSession } from "next-auth/react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { FaGithub, FaLock } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { HiLogout } from "react-icons/hi";
+import { MdOutlineAlternateEmail } from "react-icons/md";
+import imageLogoUrl from "../../public/assets/logo.png";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req });
@@ -113,9 +108,11 @@ export default function Login() {
                     >
                         <div className="flex flex-col mb-2">
                             <div className="flex relative ">
-                                <Input
-                                    icon={<MdOutlineAlternateEmail />}
-                                    className="rounded-l-none "
+                                <span className="icon-input">
+                                    <MdOutlineAlternateEmail />
+                                </span>
+                                <input
+                                    className="input input-primary   "
                                     type="email"
                                     autoComplete=""
                                     required
@@ -126,9 +123,11 @@ export default function Login() {
                         </div>
                         <div className="flex flex-col mb-6">
                             <div className="flex relative ">
-                                <Input
-                                    icon={<FaLock />}
-                                    className="rounded-l-none"
+                                <span className="icon-input">
+                                    <FaLock />
+                                </span>
+                                <input
+                                    className="input input-primary"
                                     type="password"
                                     required
                                     autoComplete=""
@@ -156,10 +155,14 @@ export default function Login() {
                             </div>
                         </div>
                         <div className="flex w-full">
-                            <Button type="submit" disabled={isLogging}>
+                            <button
+                                type="submit"
+                                disabled={isLogging}
+                                className="btn btn-primary"
+                            >
                                 <HiLogout className="text-xl" />{" "}
                                 {isLogging ? "Entrando..." : "Entrar"}
-                            </Button>
+                            </button>
                         </div>
                     </form>
                 </div>

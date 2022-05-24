@@ -1,8 +1,8 @@
-import { Fragment, useState } from "react";
-import Image from "next/image";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import { Fragment, useState } from "react";
 import imageLogoUrl from "../../public/assets/logo.png";
 import { UserPasswordModal } from "./modals/UserPasswordModal";
 import { ThemeButton } from "./ThemeButton";

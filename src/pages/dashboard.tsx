@@ -1,33 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { getSession, useSession } from "next-auth/react";
-import { GetServerSideProps } from "next";
-import axios from "../lib/axios";
+import { Header } from "@/components/Header";
+import { InputAndButton } from "@/components/InputAndButton";
+import { CrudModal, TypeSubmitCrud } from "@/components/modals/CrudModal";
 import { Task } from "@prisma/client";
-import toast, { Toaster } from "react-hot-toast";
-import { FaTrash } from "react-icons/fa";
-import {
-    AiFillCopy,
-    AiFillEdit,
-    AiOutlineFileSearch,
-    AiOutlinePlusCircle,
-} from "react-icons/ai";
-
-import { RiGitRepositoryPrivateLine } from "react-icons/ri";
-
-import { CgSearch } from "react-icons/cg";
-import {
-    Header,
-    InputAndButton,
-    Button,
-    TextArea,
-    ButtonMiniIcon,
-    CrudModal,
-    Input,
-    TypeSubmitCrud,
-    Checkbox,
-} from "@/components/Index";
+import { GetServerSideProps } from "next";
+import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { AiFillCopy, AiFillEdit, AiOutlinePlusCircle } from "react-icons/ai";
+import { CgSearch } from "react-icons/cg";
+import { FaTrash } from "react-icons/fa";
 import { MdOutlineManageSearch, MdOutlinePublic } from "react-icons/md";
+import { RiGitRepositoryPrivateLine } from "react-icons/ri";
+import axios from "../lib/axios";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession({ req: context.req });
@@ -133,7 +118,7 @@ export default function App() {
                 }}
             >
                 <>
-                    <Input // title
+                    <input // title
                         disabled={typeSubmit === "delete"}
                         autoFocus
                         required
@@ -144,12 +129,12 @@ export default function App() {
                                 title: String(e.target.value),
                             })
                         }
+                        className="input input-primary"
                         value={String(taskEdit?.title)}
                     />
-
                     <div className="h-2"></div>
-
-                    <TextArea // description
+                    <textarea // description
+                        className="input input-primary"
                         rows={4}
                         disabled={typeSubmit === "delete"}
                         required
@@ -162,23 +147,24 @@ export default function App() {
                         }
                         value={String(taskEdit.description)}
                     />
-
                     <div className="h-4"></div>
-
-                    <Checkbox
-                        checked={taskEdit.isPublic}
-                        onClick={(e) =>
-                            setTaskEdit({
-                                ...taskEdit,
-                                isPublic: Boolean(!taskEdit.isPublic),
-                            })
-                        }
-                    >
+                    <div className="flex items-center gap-2 text-sm ">
+                        <input
+                            type="checkbox"
+                            className="input input-primary checkbox"
+                            defaultChecked={taskEdit.isPublic}
+                            onChange={(e) =>
+                                setTaskEdit({
+                                    ...taskEdit,
+                                    isPublic: Boolean(!taskEdit.isPublic),
+                                })
+                            }
+                        />
                         É público?{" "}
                         <div className="text-xs">
                             será exibido na busca da api pública
                         </div>
-                    </Checkbox>
+                    </div>
                 </>
             </CrudModal>
             <div className="flex flex-col  w-screen  ">
@@ -187,13 +173,14 @@ export default function App() {
 
                 <div className="max-w-4xl px-5 mx-auto w-screen mt-10  ">
                     <div className="mb-5">
-                        <Button
-                            icon={<AiOutlinePlusCircle className="text-2xl" />}
+                        <button
                             type="button"
+                            className="btn btn-primary"
                             onClick={() => openModalCrud("new")}
                         >
-                            Incluir Novo
-                        </Button>
+                            <AiOutlinePlusCircle className="text-2xl" /> Inserir
+                            Novo
+                        </button>
                     </div>
                     <form className="mb-5" onSubmit={handleSearchSubmit}>
                         <InputAndButton
@@ -222,9 +209,9 @@ export default function App() {
                                 <div className="dark:bg-slate-800 justify-center  bg-slate-200 rounded-lg ">
                                     <div>
                                         <div className="flex ">
-                                            <Input
+                                            <input
                                                 disabled
-                                                className="border-0"
+                                                className="border-0 input input-primary"
                                                 value={task.title}
                                             />
                                             <div className=" text-theme-light-text-secondary bg-transparent h-auto w-10 flex justify-center items-center">
@@ -235,12 +222,12 @@ export default function App() {
                                                 )}
                                             </div>
                                         </div>
-                                        <TextArea
+                                        <textarea
                                             cols={1}
                                             disabled
-                                            className="border-0"
+                                            className="border-0 input input-primary"
                                             value={task.description ?? ""}
-                                        ></TextArea>
+                                        ></textarea>
                                     </div>
 
                                     <div className=" flex justify-between  mb-2 p-2  text-base ">
@@ -258,9 +245,9 @@ export default function App() {
                                         </span>
 
                                         <div className="flex">
-                                            <ButtonMiniIcon
+                                            <button
                                                 title="Copiar"
-                                                className="hover:text-green-500"
+                                                className="hover:text-green-500 btn btn-mini btn-default border-0"
                                                 onClick={() =>
                                                     handleCopyText(
                                                         String(task.description)
@@ -268,21 +255,21 @@ export default function App() {
                                                 }
                                             >
                                                 <AiFillCopy className="text-base" />
-                                            </ButtonMiniIcon>
+                                            </button>
 
-                                            <ButtonMiniIcon
+                                            <button
                                                 title="Alterar"
-                                                className="hover:text-blue-500"
+                                                className="hover:text-blue-500 btn btn-mini btn-default  border-0"
                                                 onClick={() =>
                                                     openModalCrud("edit", task)
                                                 }
                                             >
                                                 <AiFillEdit className="text-xl" />
-                                            </ButtonMiniIcon>
+                                            </button>
 
-                                            <ButtonMiniIcon
+                                            <button
                                                 title="Deletar"
-                                                className="hover:text-red-500"
+                                                className="hover:text-red-500 btn btn-mini btn-default  border-0"
                                                 onClick={() =>
                                                     openModalCrud(
                                                         "delete",
@@ -291,7 +278,7 @@ export default function App() {
                                                 }
                                             >
                                                 <FaTrash className="text-sm" />
-                                            </ButtonMiniIcon>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

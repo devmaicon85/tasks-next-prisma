@@ -1,13 +1,9 @@
-import Modal from "react-modal";
-import { useEffect, useState } from "react";
-import { TextArea } from "../TextArea";
-import { Button } from "../Button";
-import { FaTasks } from "react-icons/fa";
 import axios from "@/lib/axios";
-import { ModalBase } from "./ModalBase";
-import { HiAdjustments } from "react-icons/hi";
-import { Input } from "../Input";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { AiFillSave } from "react-icons/ai";
+import { HiAdjustments } from "react-icons/hi";
+import { ModalBase } from "./ModalBase";
 
 type PropsType = {
     handleFinally: () => void;
@@ -62,8 +58,9 @@ export function UserPasswordModal({
                 setIsOpen={setIsOpen}
             >
                 <form onSubmit={handleSubmit}>
-                    <Input
+                    <input
                         autoFocus
+                        className="input input-primary"
                         required
                         type="password"
                         placeholder="informa nova senha"
@@ -73,9 +70,10 @@ export function UserPasswordModal({
 
                     <div className="mt-4 flex justify-end">
                         <div>
-                            <Button type="submit">
+                            <button type="submit" className="btn btn-primary">
+                                <AiFillSave />
                                 {!saving ? "Salvar" : "Salvando..."}
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 </form>

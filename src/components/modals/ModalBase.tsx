@@ -1,6 +1,6 @@
-import Modal from "react-modal";
 import { useEffect } from "react";
 import { MdClose } from "react-icons/md";
+import Modal from "react-modal";
 
 type PropsType = {
     setIsOpen: (open: boolean) => void;

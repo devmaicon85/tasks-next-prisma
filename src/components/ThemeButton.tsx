@@ -1,7 +1,5 @@
-import { MoonIcon, SunIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
-import { FaAffiliatetheme, FaMoon, FaSun } from "react-icons/fa";
-import { MdDarkMode, MdOutlineDarkMode } from "react-icons/md";
+import { FaMoon, FaSun } from "react-icons/fa";
 
 type Props = {
     className?: string;
