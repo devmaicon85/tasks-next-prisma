@@ -19,7 +19,7 @@
     }
 
     .btn {
-        @apply flex gap-2 justify-center items-center px-4 h-[42px] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-opacity-70 hover:scale-[98%] rounded-[4px] transition ease-in duration-75;
+        @apply flex flex-1 gap-2 justify-center items-center px-4 h-[42px] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-opacity-70 hover:scale-[98%] rounded-[4px] transition ease-in duration-75;
     }
 
     .btn-default {
@@ -47,7 +47,7 @@
     }
 
     .input-primary {
-        @apply text-gray-600 border-gray-200 rounded-sm bg-gray-50 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary;
+        @apply text-gray-600 border-gray-300 rounded-sm bg-gray-50 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary;
     }
 
     .checkbox {
@@ -55,7 +55,7 @@
     }
 
     .icon-input {
-        @apply inline-flex items-center px-3 text-sm text-gray-500 bg-white border-t border-b border-l border-gray-700 shadow-sm rounded-l-md dark:bg-gray-600 dark:border-gray-600 dark:text-gray-300;
+        @apply inline-flex items-center px-3 text-sm text-gray-500 bg-white border-t border-b border-l border-gray-300 shadow-sm rounded-l-md dark:bg-gray-600 dark:border-gray-600 dark:text-gray-300;
     }
 }
 
