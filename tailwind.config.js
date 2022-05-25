@@ -12,6 +12,10 @@ module.exports = {
     content: ["./src/components/**/*.tsx", "./src/pages/**/*.tsx"],
     darkMode: "class",
 
+    // variants: {
+    //     typography: ['dark'],
+    //   },
+
     theme: {
         // defaultTheme: {},
 

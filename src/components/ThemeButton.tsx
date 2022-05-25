@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 
@@ -5,48 +6,52 @@ type Props = {
     className?: string;
 };
 
-const themeDefault = "light";
-
 export function ThemeButton({ className }: Props) {
+    const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
-    const [theme, setTheme] = useState<"dark" | "light">(themeDefault);
-
-    useEffect(() => {
-        setTheme(localStorage.theme ?? themeDefault);
-        onSetDark();
-    }, []);
 
     useEffect(() => setMounted(true), []);
 
     if (!mounted) return null;
 
-    function onSetDark() {
-        if (
-            localStorage.theme === "dark" ||
-            (!("theme" in localStorage) &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ) {
-            document.documentElement.classList.add("dark");
-            localStorage.theme = "dark";
-            setTheme("dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-            localStorage.theme = "light";
-            setTheme("dark");
-        }
-    }
+    const onAlterTheme = () =>
+        theme === "dark" ? setTheme("light") : setTheme("dark");
 
-    function onAlterTheme() {
-        if (theme === "dark") {
-            document.documentElement.classList.remove("dark");
-            localStorage.theme = "light";
-            setTheme("light");
-        } else {
-            document.documentElement.classList.add("dark");
-            localStorage.theme = "dark";
-            setTheme("dark");
-        }
-    }
+    // metodo anterior apenas cliente
+    // const [theme, setTheme] = useState<"dark" | "light">(themeDefault);
+
+    // useEffect(() => {
+    //     setTheme(localStorage.theme ?? themeDefault);
+    //     onSetDark();
+    // }, []);
+
+    // function onSetDark() {
+    //     if (
+    //         localStorage.theme === "dark" ||
+    //         (!("theme" in localStorage) &&
+    //             window.matchMedia("(prefers-color-scheme: dark)").matches)
+    //     ) {
+    //         document.documentElement.classList.add("dark");
+    //         localStorage.theme = "dark";
+    //         setTheme("dark");
+    //     } else {
+    //         document.documentElement.classList.remove("dark");
+    //         localStorage.theme = "light";
+    //         setTheme("dark");
+    //     }
+    // }
+
+    // function onAlterTheme() {
+    //     if (theme === "dark") {
+    //         document.documentElement.classList.remove("dark");
+    //         localStorage.theme = "light";
+    //         setTheme("light");
+    //     } else {
+    //         document.documentElement.classList.add("dark");
+    //         localStorage.theme = "dark";
+    //         setTheme("dark");
+    //     }
+    // }
 
     return (
         <div
