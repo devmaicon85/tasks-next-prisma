@@ -54,7 +54,9 @@ export default function Login() {
         const status: any = await signIn("credentials", {
             email,
             password,
-            callbackUrl: String(router?.query?.callbackUrl),
+            callbackUrl:
+                router?.query?.callbackUrl &&
+                String(router?.query?.callbackUrl),
             redirect: true,
         });
 

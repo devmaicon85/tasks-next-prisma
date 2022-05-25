@@ -6,7 +6,12 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { AiFillCopy, AiFillEdit, AiOutlinePlusCircle } from "react-icons/ai";
+import {
+    AiFillCopy,
+    AiFillEdit,
+    AiOutlineLoading,
+    AiOutlinePlusCircle,
+} from "react-icons/ai";
 import { CgSearch } from "react-icons/cg";
 import { FaTrash } from "react-icons/fa";
 import { MdOutlineManageSearch, MdOutlinePublic } from "react-icons/md";
@@ -40,7 +45,7 @@ export default function App() {
 
     const [searchText, setSearchText] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [search, setSearch] = useState(false);
+    const [search, setSearch] = useState(true);
     const [data, setData] = useState<Task[]>([]);
 
     const searchParams = new URLSearchParams(
@@ -182,10 +187,17 @@ export default function App() {
                     <form className="mb-5" onSubmit={handleSearchSubmit}>
                         <InputAndButton
                             iconInput={<MdOutlineManageSearch />}
-                            iconButton={<CgSearch />}
-                            titleButton={`Pesquisar ${search ? "..." : ""}`}
+                            iconButton={
+                                search ? (
+                                    <AiOutlineLoading className="text-xl animate-spin" />
+                                ) : (
+                                    <CgSearch />
+                                )
+                            }
+                            titleButton={`${search ? "Buscando" : "Buscar"}`}
                             placeholder="Buscar Registros"
                             onChange={(e) => setSearchText(e.target.value)}
+                            disabled={search}
                         />
                     </form>
                     {data.length > 0 && (
