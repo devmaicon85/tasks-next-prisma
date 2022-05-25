@@ -12,7 +12,7 @@ export default class MyDocument extends Document {
                     />
                     <link rel="icon" href="/assets/logo.png" />
                 </Head>
-                <body className="text-slate-700 dark:bg-slate-900 dark:text-white ">
+                <body>
                     <Main />
                     <NextScript />
                     <div id="root_modal"></div>

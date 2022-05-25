@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Erro404() {
     return (
         <section>
-            <div className="dark:bg-slate-900 bg-slate-100 text-white h-screen  flex justify-center items-center">
+            <div className="flex items-center justify-center h-screen text-white ">
                 <div className="flex">
                     <div className="m-auto text-center">
                         <div className="">
@@ -270,13 +270,14 @@ export default function Erro404() {
                                 </defs>
                             </svg>
                         </div>
-                        <div className="flex justify-center text-xl md:text-3xl text-green-500 p-2 mb-4">
-                            Página não encontrada <ThemeButton />
+                        <div className="flex justify-center ">
+                            <div className="p-2 mb-4 text-xl text-primary md:text-3xl">
+                                Página não encontrada
+                            </div>
+                            <ThemeButton />
                         </div>
                         <Link href="/">
-                            <a className="bg-transparent bg-green-500 text-green-300 hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-green-300 hover:border-transparent">
-                                Voltar pra Home
-                            </a>
+                            <a className="btn-link">Voltar pra Home</a>
                         </Link>
                     </div>
                 </div>

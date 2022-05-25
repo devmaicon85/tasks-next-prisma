@@ -2,8 +2,7 @@ import { Header } from "@/components/Header";
 import { InputAndButton } from "@/components/InputAndButton";
 import { CrudModal, TypeSubmitCrud } from "@/components/modals/CrudModal";
 import { Task } from "@prisma/client";
-import { GetServerSideProps } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -12,24 +11,22 @@ import { CgSearch } from "react-icons/cg";
 import { FaTrash } from "react-icons/fa";
 import { MdOutlineManageSearch, MdOutlinePublic } from "react-icons/md";
 import { RiGitRepositoryPrivateLine } from "react-icons/ri";
-import axios from "../lib/axios";
+import axios from "../../lib/axios";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await getSession({ req: context.req });
-
-    if (!session) {
-        return {
-            redirect: {
-                destination: "/login",
-                permanent: false,
-            },
-        };
-    }
-
-    return {
-        props: { session },
-    };
-};
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//     // const session = await getSession({ req: context.req });
+//     // if (!session) {
+//     //     return {
+//     //         redirect: {
+//     //             destination: "/login",
+//     //             permanent: false,
+//     //         },
+//     //     };
+//     // }
+//     // return {
+//     //     props: { session },
+//     // };
+// };
 
 export type DataTasksType = {
     id: string | null;
@@ -167,11 +164,11 @@ export default function App() {
                     </div>
                 </>
             </CrudModal>
-            <div className="flex flex-col  w-screen  ">
+            <div className="flex flex-col w-screen ">
                 <Header />
                 <Toaster position="bottom-center" />
 
-                <div className="max-w-4xl px-5 mx-auto w-screen mt-10  ">
+                <div className="w-screen max-w-4xl px-5 mx-auto mt-10 ">
                     <div className="mb-5">
                         <button
                             type="button"
@@ -192,7 +189,7 @@ export default function App() {
                         />
                     </form>
                     {data.length > 0 && (
-                        <div className="text-sm w-full mb-3 justify-end flex">
+                        <div className="flex justify-end w-full mb-3 text-sm">
                             <Link
                                 href={`${searchParams}/api/public/tasks?key=${session?.user.id}&search=`}
                                 passHref
@@ -206,15 +203,15 @@ export default function App() {
                     {data &&
                         data.map((task, index) => (
                             <div key={index}>
-                                <div className="dark:bg-slate-800 justify-center  bg-slate-200 rounded-lg ">
+                                <div className="justify-center rounded-lg dark:bg-slate-800 bg-slate-200 ">
                                     <div>
                                         <div className="flex ">
                                             <input
                                                 disabled
-                                                className="border-0 input input-primary"
+                                                className="input input-primary"
                                                 value={task.title}
                                             />
-                                            <div className=" text-theme-light-text-secondary bg-transparent h-auto w-10 flex justify-center items-center">
+                                            <div className="flex items-center justify-center w-10 h-auto text-gray-500 bg-transparent">
                                                 {task.isPublic ? (
                                                     <MdOutlinePublic title="público" />
                                                 ) : (
@@ -230,7 +227,7 @@ export default function App() {
                                         ></textarea>
                                     </div>
 
-                                    <div className=" flex justify-between  mb-2 p-2  text-base ">
+                                    <div className="flex justify-between p-2 mb-2 text-base ">
                                         <span className="text-xs opacity-50">
                                             {task.createdAt &&
                                                 new Intl.DateTimeFormat(
@@ -247,7 +244,7 @@ export default function App() {
                                         <div className="flex">
                                             <button
                                                 title="Copiar"
-                                                className="hover:text-green-500 btn btn-mini btn-default border-0"
+                                                className="border-0 hover:text-green-500 btn btn-mini btn-default"
                                                 onClick={() =>
                                                     handleCopyText(
                                                         String(task.description)
@@ -259,7 +256,7 @@ export default function App() {
 
                                             <button
                                                 title="Alterar"
-                                                className="hover:text-blue-500 btn btn-mini btn-default  border-0"
+                                                className="border-0 hover:text-blue-500 btn btn-mini btn-default"
                                                 onClick={() =>
                                                     openModalCrud("edit", task)
                                                 }
@@ -269,7 +266,7 @@ export default function App() {
 
                                             <button
                                                 title="Deletar"
-                                                className="hover:text-red-500 btn btn-mini btn-default  border-0"
+                                                className="border-0 hover:text-red-500 btn btn-mini btn-default"
                                                 onClick={() =>
                                                     openModalCrud(
                                                         "delete",

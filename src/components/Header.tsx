@@ -2,22 +2,22 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import imageLogoUrl from "../../public/assets/logo.png";
 import { UserPasswordModal } from "./modals/UserPasswordModal";
 import { ThemeButton } from "./ThemeButton";
 
 const navigation = [
-    { name: "Home", href: "", current: true },
-    { name: "Tarefas", href: "", current: false },
-    { name: "Projetos", href: "", current: false },
+    { name: "Home", href: "/admin" },
+    { name: "Tarefas", href: "/admin/tasks" },
+    { name: "Projetos", href: "/admin/projects" },
 ];
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ");
-}
-
 export function Header() {
+    const router = useRouter();
+
     const { data: session } = useSession();
 
     const [isOpenModalPassword, setIsOpenModalPassword] = useState(false);
@@ -66,25 +66,28 @@ export function Header() {
                                     />
                                 </div>
                                 <div className="hidden sm:block sm:ml-6  justify-center">
-                                    <div className="flex space-x-4 justify-center ">
+                                    <div className="flex space-x-4 justify-center mt-[2px]">
                                         {navigation.map((item) => (
-                                            <a
-                                                key={item.name}
+                                            <Link
                                                 href={item.href}
-                                                className={classNames(
-                                                    item.current
-                                                        ? "bg-gray-900 text-white"
-                                                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                                    "px-3 py-2 rounded-md text-sm font-medium"
-                                                )}
-                                                aria-current={
-                                                    item.current
-                                                        ? "page"
-                                                        : undefined
-                                                }
+                                                passHref
+                                                key={item.name}
                                             >
-                                                {item.name}
-                                            </a>
+                                                <a
+                                                    className={`
+                                                      ${
+                                                          router.asPath ===
+                                                          item.href
+                                                              ? "bg-gray-900 text-white"
+                                                              : "text-gray-300 hover:bg-gray-700"
+                                                      } hover:text-white 
+                                                            px-3 py-2 rounded-md text-sm font-medium"
+                                                      
+                                                      `}
+                                                >
+                                                    {item.name}
+                                                </a>
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>
@@ -135,12 +138,12 @@ export function Header() {
                                             <Menu.Item>
                                                 {({ active }) => (
                                                     <a
-                                                        className={classNames(
+                                                        className={`${
                                                             active
                                                                 ? "bg-gray-100"
-                                                                : "",
-                                                            "block px-4 py-2 text-sm text-gray-700"
-                                                        )}
+                                                                : ""
+                                                        }
+                                                            block px-4 py-2 text-sm text-gray-700`}
                                                     >
                                                         Meu Perfil (
                                                         {session?.user.email})
@@ -149,38 +152,42 @@ export function Header() {
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <a
-                                                        onClick={() =>
-                                                            setIsOpenModalPassword(
-                                                                true
-                                                            )
-                                                        }
-                                                        href="#"
-                                                        className={classNames(
-                                                            active
-                                                                ? "bg-gray-100"
-                                                                : "",
-                                                            "block px-4 py-2 text-sm text-gray-700"
-                                                        )}
-                                                    >
-                                                        Alterar Senha
-                                                    </a>
+                                                    <Link href="" passHref>
+                                                        <a
+                                                            onClick={() =>
+                                                                setIsOpenModalPassword(
+                                                                    true
+                                                                )
+                                                            }
+                                                            className={`
+                                                            ${
+                                                                active
+                                                                    ? "bg-gray-100"
+                                                                    : ""
+                                                            }
+                                                            block px-4 py-2 text-sm text-gray-700`}
+                                                        >
+                                                            Alterar Senha
+                                                        </a>
+                                                    </Link>
                                                 )}
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <a
-                                                        href="#"
-                                                        onClick={Logoff}
-                                                        className={classNames(
-                                                            active
-                                                                ? "bg-gray-100"
-                                                                : "",
-                                                            "block px-4 py-2 text-sm text-gray-700"
-                                                        )}
-                                                    >
-                                                        Sair
-                                                    </a>
+                                                    <Link href="" passHref>
+                                                        <a
+                                                            onClick={Logoff}
+                                                            className={`
+                                                            ${
+                                                                active
+                                                                    ? "bg-gray-100"
+                                                                    : ""
+                                                            }
+                                                            block px-4 py-2 text-sm text-gray-700`}
+                                                        >
+                                                            Sair
+                                                        </a>
+                                                    </Link>
                                                 )}
                                             </Menu.Item>
                                         </Menu.Items>
@@ -197,15 +204,13 @@ export function Header() {
                                     key={item.name}
                                     as="a"
                                     href={item.href}
-                                    className={classNames(
-                                        item.current
-                                            ? "bg-gray-900 text-white"
-                                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                        "block px-3 py-2 rounded-md text-base font-medium"
-                                    )}
-                                    aria-current={
-                                        item.current ? "page" : undefined
-                                    }
+                                    className={`
+                                        ${
+                                            router.asPath === item.href
+                                                ? "bg-gray-900 text-white"
+                                                : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                                        }
+                                        block px-3 py-2 rounded-md text-base font-medium`}
                                 >
                                     {item.name}
                                 </Disclosure.Button>

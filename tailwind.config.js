@@ -1,4 +1,11 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
+function withOpacityValue(variable) {
+    return ({ opacityValue }) => {
+        if (opacityValue === undefined) {
+            return `var(${variable})`; // return `rgb(var(${variable}))`;
+        }
+        return `var(${variable})`; // return `rgb(var(${variable}) / ${opacityValue})`;
+    };
+}
 
 module.exports = {
     mode: "jit", // criar o css necessario somente que o app precisa
@@ -10,23 +17,8 @@ module.exports = {
 
         extend: {
             colors: {
-                theme: {
-                    white: "#FFF",
-
-                    light: {
-                        brand: "green",
-                        danger: "rgb(239 68 68)",
-
-                        background: {
-                            brand: "#E5E5E5",
-                            input: "#F9F9FB",
-                        },
-                        text: {
-                            brand: "#0f172a",
-                            secondary: "#374151",
-                        },
-                    },
-                },
+                primary: withOpacityValue("--color-primary"),
+                danger: withOpacityValue("--color-danger"),
             },
         },
     },

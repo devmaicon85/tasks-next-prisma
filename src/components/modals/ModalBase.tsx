@@ -24,14 +24,14 @@ export function ModalBase({
         <Modal
             isOpen={isOpen}
             onRequestClose={() => setIsOpen(false)}
-            // overlayClassName="react-modal-overlay"
+            overlayClassName="react-modal-overlay"
             className="react-modal-content"
         >
-            <div className="py-12 bg-theme-light-background-brand dark:bg-slate-900 bg-opacity-80  transition duration-500 ease-in-out z-20 absolute top-0 right-0 bottom-0 left-0">
-                <div className="container mx-auto w-full p-5 md:w-2/3 max-w-3xl">
-                    <div className="relative py-8 px-5 md:px-10 bg-gray-100 dark:bg-gray-800 shadow-md rounded-2xl border border-gray-400">
+            <div className="absolute top-0 bottom-0 left-0 right-0 z-20 py-12 transition duration-500 ease-in-out bg-gray-900 bg-opacity-70 ">
+                <div className="container w-full max-w-3xl p-5 mx-auto md:w-2/3">
+                    <div className="relative px-5 py-8 bg-gray-100 border-gray-400 shadow-md md:px-10 dark:bg-gray-800 rounded-2xl">
                         <button
-                            className=" cursor-pointer absolute text-2xl hover:scale-110 top-0 right-0 mt-4 mr-5  hover:dark:text-gray-100 text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"
+                            className="absolute top-0 right-0 mt-4 mr-5 text-2xl text-gray-600 transition duration-150 ease-in-out rounded cursor-pointer hover:scale-110 hover:dark:text-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-600"
                             aria-label="close modal"
                             role="button"
                             onClick={() => setIsOpen(false)}
@@ -39,9 +39,9 @@ export function ModalBase({
                         >
                             <MdClose />
                         </button>
-                        <div className="flex flex-row h-14 gap-4 items-center dark:text-gray-100 text-gray-600 mb-2">
+                        <div className="flex flex-row items-center gap-4 mb-2 text-gray-600 h-14 dark:text-gray-100">
                             {icon}
-                            <div className="dark:text-gray-100 text-gray-600 text-xl font-bold tracking-normal">
+                            <div className="text-xl font-bold tracking-normal text-gray-600 dark:text-gray-100">
                                 {title}
                             </div>
                         </div>

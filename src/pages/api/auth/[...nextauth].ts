@@ -1,20 +1,18 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import GitProvider from "next-auth/providers/github";
-import CredentialsProvider from "next-auth/providers/credentials";
-
+import prismaClient from "@/lib/prismaClient";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import axios from "@/lib/axios";
 import { compare } from "bcryptjs";
-import prismaClient from "@/lib/prismaClient";
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GitProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
 const prisma = new PrismaClient();
 
 export const authOptions = {
     adapter: PrismaAdapter(prisma),
     pages: {
-        signIn: "/dashboard",
+        signIn: "/admin",
         signOut: "/login",
         error: "/login",
     },

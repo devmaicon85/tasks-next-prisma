@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         return {
             // se tiver entra no app antes de aparecer tela pro usuario
             redirect: {
-                destination: "/dashboard",
+                destination: "/admin",
                 permanent: false,
             },
         };
@@ -54,25 +54,20 @@ export default function Login() {
         const status: any = await signIn("credentials", {
             email,
             password,
-            callbackUrl: `${window.location.origin}/dashboard`,
-            redirect: false,
+            callbackUrl: String(router?.query?.callbackUrl),
+            redirect: true,
         });
 
         if (status?.error) {
             setLoginError(status.error);
             setIsLogging(false);
         }
-        if (status.url) {
-            console.log("redirecionado para...", status.url);
+        if (status?.url) {
             router.push(status.url);
         }
     }
 
     const { data: session, status } = useSession();
-
-    // if (status === "authenticated") {
-    //     Router.push("/dashboard");
-    // }
 
     function SignInGitHub() {
         signIn("github");
@@ -83,9 +78,9 @@ export default function Login() {
     }
 
     return (
-        <div className="h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col w-full max-w-md px-4 py-8 rounded-lg shadow bg-gray-100 dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
-                <div className="justify-center mb-4  flex w-full">
+        <div className="flex items-center justify-center h-screen px-4 py-12 sm:px-6 lg:px-8">
+            <div className="flex flex-col w-full max-w-md px-4 py-8 bg-gray-100 rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
+                <div className="flex justify-center w-full mb-4">
                     <Image
                         src={imageLogoUrl}
                         width={70}
@@ -107,12 +102,12 @@ export default function Login() {
                         onSubmit={handleSignInCredentials}
                     >
                         <div className="flex flex-col mb-2">
-                            <div className="flex relative ">
+                            <div className="relative flex ">
                                 <span className="icon-input">
                                     <MdOutlineAlternateEmail />
                                 </span>
                                 <input
-                                    className="input input-primary   "
+                                    className="input input-primary "
                                     type="email"
                                     autoComplete=""
                                     required
@@ -122,7 +117,7 @@ export default function Login() {
                             </div>
                         </div>
                         <div className="flex flex-col mb-6">
-                            <div className="flex relative ">
+                            <div className="relative flex ">
                                 <span className="icon-input">
                                     <FaLock />
                                 </span>
@@ -138,7 +133,7 @@ export default function Login() {
                                 />
                             </div>
                             {loginError && (
-                                <div className="text-sm text-red-400 my-3">
+                                <div className="my-3 text-sm text-red-400">
                                     {loginError}
                                 </div>
                             )}
@@ -167,22 +162,22 @@ export default function Login() {
                     </form>
                 </div>
 
-                <div className="gap-4 grid grid-cols-1  md:grid-cols-2 item-center mt-6">
+                <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 item-center">
                     <button
                         onClick={SignInGitHub}
                         type="button"
-                        className="py-2 px-4 flex justify-center items-center  bg-slate-600 hover:bg-slate-700 focus:ring-slate-500 focus:ring-offset-slate-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                        className="flex items-center justify-center w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-slate-600 hover:bg-slate-700 focus:ring-slate-500 focus:ring-offset-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 "
                     >
-                        <FaGithub className="text-2xl mx-2" />
+                        <FaGithub className="mx-2 text-2xl" />
                         GitHub
                     </button>
 
                     <button
                         onClick={SignInGoogle}
                         type="button"
-                        className="py-2 px-4 flex justify-center items-center  bg-slate-600 hover:bg-slate-700 focus:ring-slate-500 focus:ring-offset-slate-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                        className="flex items-center justify-center w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-slate-600 hover:bg-slate-700 focus:ring-slate-500 focus:ring-offset-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 "
                     >
-                        <FcGoogle className="text-2xl mx-2" />
+                        <FcGoogle className="mx-2 text-2xl" />
                         Google
                     </button>
                 </div>

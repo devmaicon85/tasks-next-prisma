@@ -3,37 +3,51 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    font-family: Inter, Arial, Helvetica, sans-serif;
+:root {
+    --color-primary: green;
+    --color-danger: #ce0000;
 }
 
 @layer components {
+    body {
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        @apply text-gray-800 dark:text-gray-200 bg-background;
+    }
+
+    .bg-background {
+        @apply bg-gray-50 dark:bg-gray-900;
+    }
+
     .btn {
-        @apply flex gap-2 justify-center items-center px-4 h-[42px] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-opacity-70 hover:scale-[98%] rounded-[4px] transition ease-in duration-75 flex-1;
+        @apply flex gap-2 justify-center items-center px-4 h-[42px] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-opacity-70 hover:scale-[98%] rounded-[4px] transition ease-in duration-75;
     }
 
     .btn-default {
-        @apply dark:hover:brightness-90 border dark:focus:ring-gray-600 text-gray-500 focus:ring-gray-500 dark:hover:bg-transparent  bg-transparent hover:bg-transparent dark:bg-transparent;
+        @apply text-gray-500 bg-transparent border dark:hover:brightness-90 dark:focus:ring-gray-600 focus:ring-gray-500 dark:hover:bg-transparent hover:bg-transparent dark:bg-transparent;
+    }
+
+    .btn-link {
+        @apply text-primary focus:ring-white hover:brightness-90 px-4 h-12 text-sm font-medium focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-opacity-70 hover:scale-[98%] rounded-[4px] transition ease-in duration-75;
     }
 
     .btn-primary {
-        @apply text-theme-white bg-theme-light-brand focus:ring-theme-light-brand;
+        @apply text-white text-opacity-95 bg-primary focus:ring-primary;
     }
 
     .btn-danger {
-        @apply text-theme-white bg-theme-light-danger focus:ring-theme-light-danger;
+        @apply text-white bg-danger focus:ring-danger;
     }
 
     .btn-mini {
-        @apply h-5 transition ease-in duration-75 hover:scale-125;
+        @apply h-5 transition duration-75 ease-in hover:scale-125;
     }
 
     .input {
-        @apply outline-none block p-4 w-full text-sm border placeholder:opacity-70 placeholder:h-7 focus:ring-0 disabled:opacity-60;
+        @apply block w-full p-4 text-sm border outline-none placeholder:opacity-70 placeholder:h-7 focus:ring-0 disabled:opacity-60;
     }
 
     .input-primary {
-        @apply border-theme-light-background-brand bg-gray-50 text-gray-600 rounded-sm  focus:ring-theme-light-brand focus:border-theme-light-brand dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-theme-light-brand dark:focus:border-theme-light-brand;
+        @apply text-gray-600 border-gray-200 rounded-sm bg-gray-50 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary;
     }
 
     .checkbox {
@@ -41,7 +55,7 @@ body {
     }
 
     .icon-input {
-        @apply rounded-l-md inline-flex dark:bg-gray-600 dark:border-gray-600 items-center px-3 border-t border-l border-b bg-white border-theme-light-background-brand text-gray-500 dark:text-gray-300 shadow-sm text-sm;
+        @apply inline-flex items-center px-3 text-sm text-gray-500 bg-white border-t border-b border-l border-gray-700 shadow-sm rounded-l-md dark:bg-gray-600 dark:border-gray-600 dark:text-gray-300;
     }
 }
 
