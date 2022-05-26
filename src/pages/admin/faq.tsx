@@ -126,7 +126,7 @@ export default function App() {
                         disabled={typeSubmit === "delete"}
                         autoFocus
                         required
-                        placeholder="título do registro..."
+                        placeholder="Título do pergunta"
                         onChange={(e) =>
                             setDataEdit({
                                 ...dataEdit,
@@ -137,12 +137,26 @@ export default function App() {
                         value={String(dataEdit?.title)}
                     />
                     <div className="h-2"></div>
+                    <input // keywords
+                        disabled={typeSubmit === "delete"}
+                        autoFocus
+                        placeholder="palavras chaves (separado por vírgula)"
+                        onChange={(e) =>
+                            setDataEdit({
+                                ...dataEdit,
+                                keywords: String(e.target.value),
+                            })
+                        }
+                        className="input input-primary"
+                        value={String(dataEdit?.keywords ?? "")}
+                    />
+                    <div className="h-2"></div>
                     <textarea // description
                         className="input input-primary"
                         rows={4}
                         disabled={typeSubmit === "delete"}
                         required
-                        placeholder="descrição do registro..."
+                        placeholder="Resposta da Pergunta"
                         onChange={(e) =>
                             setDataEdit({
                                 ...dataEdit,
@@ -164,9 +178,10 @@ export default function App() {
                                 })
                             }
                         />
-                        É público?{" "}
+                        <div>É público?<br/>
                         <div className="text-xs">
-                            será exibido na busca da api pública
+                            será exibido na busca pública das perguntas mais frequentes
+                        </div>
                         </div>
                     </div>
                 </>
@@ -211,10 +226,10 @@ export default function App() {
                                         <div className="flex ">
                                             <input
                                                 disabled
-                                                className="input input-primary"
+                                                className="input input-primary border-0 font-bold "
                                                 value={faq.title}
                                             />
-                                            <div className="flex items-center justify-center w-10 h-auto text-gray-500 bg-transparent">
+                                            <div className="flex  items-center justify-center w-10 h-auto text-gray-500 bg-transparent">
                                                 {faq.isPublic ? (
                                                     <MdOutlinePublic title="público" />
                                                 ) : (
@@ -231,7 +246,12 @@ export default function App() {
                                     </div>
 
                                     <div className="flex justify-between p-2 mb-2 text-base ">
-                                        <span className="text-xs opacity-50">
+                                    <span className="text-xs opacity-50">
+                                           
+                                               {faq.keywords}
+                                                
+                                        </span>
+                                        {/* <span className="text-xs opacity-50">
                                             {faq.createdAt &&
                                                 new Intl.DateTimeFormat(
                                                     "pt-BR",
@@ -242,7 +262,7 @@ export default function App() {
                                                 ).format(
                                                     new Date(faq.createdAt)
                                                 )}
-                                        </span>
+                                        </span> */}
 
                                         <div className="flex">
                                             <button

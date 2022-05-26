@@ -34,9 +34,9 @@ export function CrudModal({
 
     const descriptionModal =
         typeSubmit === "new"
-            ? "Inserindo Registro"
+            ? "Inserindo "
             : typeSubmit === "edit"
-            ? "Editando Registro"
+            ? "Editando"
             : "Excluir o registro?";
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
