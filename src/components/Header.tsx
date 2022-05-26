@@ -12,7 +12,7 @@ import { ThemeButton } from "./ThemeButton";
 const navigation = [
     { name: "Home", href: "/admin" },
     { name: "Faq", href: "/admin/faq" },
-    { name: "Projetos", href: "/admin/projects" },
+    { name: "Integração", href: "/admin/integration" },
 ];
 
 export function Header() {

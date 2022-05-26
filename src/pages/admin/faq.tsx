@@ -3,7 +3,6 @@ import { InputAndButton } from "@/components/InputAndButton";
 import { CrudModal, TypeSubmitCrud } from "@/components/modals/CrudModal";
 import { Faq } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -203,18 +202,7 @@ export default function App() {
                             disabled={search}
                         />
                     </form>
-                    {data.length > 0 && (
-                        <div className="flex justify-end w-full mb-3 text-sm">
-                            <Link
-                                href={`${searchParams}/api/public/faq?key=${session?.user.id}&per_page=3&search=`}
-                                passHref
-                            >
-                                <a target="_blank" className="hover:underline">
-                                    Acessar api pública para acesso externo
-                                </a>
-                            </Link>
-                        </div>
-                    )}
+
                     {data &&
                         data.map((faq, index) => (
                             <div key={index}>

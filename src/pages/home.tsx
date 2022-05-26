@@ -25,18 +25,17 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col items-center justify-center">
                     <div className="flex m-4 mb-0 justify-center items-center text-3xl min-w-[280px] ">
-                        Faq Plataform
+                        <span className="font-mono text-5xl ">FAQ</span>{" "}
+                        <span className="ml-2 text-2xl "> Plataform</span>
                         <ThemeButton className="mb-6" />
                     </div>
-                    <div className="flex">
+                    <div className="flex justify-end">
                         <Link href="/login">
                             <a
                                 onClick={() => setLoading(true)}
                                 className="text-base duration-1000 ease-out hover:scale-125"
                             >
-                                {loading
-                                    ? "Carregando..."
-                                    : "Acessar Plataforma"}
+                                {loading ? "Carregando..." : "Acessar"}
                             </a>
                         </Link>
                     </div>
