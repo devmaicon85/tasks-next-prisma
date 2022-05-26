@@ -1,9 +1,8 @@
 import prismaClient from "@/lib/prismaClient";
-
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession, Session } from "next-auth";
+import { Session } from "next-auth";
 
-export async function searchTasks(
+export async function findAll(
     req: NextApiRequest,
     res: NextApiResponse,
     session: Session
@@ -20,7 +19,7 @@ export async function searchTasks(
             return res.status(400).end("Busca inválida");
         }
 
-        const data = await prismaClient.task.findMany({
+        const data = await prismaClient.faq.findMany({
             where: {
                 userId: session.user.id,
                 OR: [
@@ -30,7 +29,7 @@ export async function searchTasks(
                         },
                     },
                     {
-                        description: {
+                        keywords: {
                             contains: search.replace(" ", "%"),
                         },
                     },
@@ -45,12 +44,12 @@ export async function searchTasks(
     }
 }
 
-export async function updateCreateTask(
+export async function updateOrCreate(
     req: NextApiRequest,
     res: NextApiResponse,
     session: Session
 ) {
-    const { title, description, id, isPublic } = req.body;
+    const { title, description, id, isPublic, keywords } = req.body;
 
     if (!session.user.id)
         return res
@@ -62,17 +61,19 @@ export async function updateCreateTask(
 
     try {
         // CRIA OU ALTERA SE EXISTIR
-        const data = await prismaClient.task.upsert({
+        const data = await prismaClient.faq.upsert({
             create: {
                 title,
                 description,
                 isPublic,
+                keywords,
                 userId: session.user.id,
             },
             update: {
                 title,
                 description,
                 isPublic,
+                keywords,
                 userId: session.user.id,
             },
             where: { id },
@@ -84,7 +85,7 @@ export async function updateCreateTask(
     }
 }
 
-export async function deleteTask(
+export async function remove(
     req: NextApiRequest,
     res: NextApiResponse,
     session: Session
@@ -101,20 +102,20 @@ export async function deleteTask(
             .end("O servidor falhou ao obter o ID do usuário da sessão");
 
     try {
-        const task = await prismaClient.task.findFirst({
+        const faq = await prismaClient.faq.findFirst({
             where: {
                 id,
                 userId: session.user.id,
             },
         });
 
-        if (!task) {
+        if (!faq) {
             return res
                 .status(400)
                 .end("Registro não encontrado para o usuário logado");
         }
 
-        await prismaClient.task.delete({
+        await prismaClient.faq.delete({
             where: {
                 id,
             },

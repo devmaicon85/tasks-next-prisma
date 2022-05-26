@@ -11,7 +11,7 @@ import { ThemeButton } from "./ThemeButton";
 
 const navigation = [
     { name: "Home", href: "/admin" },
-    { name: "Tarefas", href: "/admin/tasks" },
+    { name: "Faq", href: "/admin/faq" },
     { name: "Projetos", href: "/admin/projects" },
 ];
 
@@ -62,7 +62,7 @@ export function Header() {
                                         src={imageLogoUrl}
                                         width={40}
                                         height={40}
-                                        alt="logo tasks"
+                                        alt="logo"
                                     />
                                 </div>
                                 <div className="justify-center hidden sm:block sm:ml-6">

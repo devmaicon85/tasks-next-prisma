@@ -1,14 +1,14 @@
+import { publicFaq } from "@/lib/api/public/publicFaq";
 import { HttpMethod } from "@/types/http";
 import { NextApiRequest, NextApiResponse } from "next";
-import { publicTasks } from "@/lib/api/public/publicTasks";
 
-export default async function publicTasksApi(
+export default async function publicFaqApi(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     switch (req.method) {
         case HttpMethod.GET:
-            return await publicTasks(req, res);
+            return await publicFaq(req, res);
 
         default:
             res.setHeader("Allow", [HttpMethod.GET]);

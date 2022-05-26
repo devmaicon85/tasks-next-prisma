@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { InputAndButton } from "@/components/InputAndButton";
 import { CrudModal, TypeSubmitCrud } from "@/components/modals/CrudModal";
-import { Task } from "@prisma/client";
+import { Faq } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -33,11 +33,12 @@ import axios from "../../lib/axios";
 //     // };
 // };
 
-export type DataTasksType = {
+export type DataFaqType = {
     id: string | null;
     title: string | null;
     description: string | null;
     isPublic: boolean | false;
+    keywords: string | null;
 };
 
 export default function App() {
@@ -46,16 +47,17 @@ export default function App() {
     const [searchText, setSearchText] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [search, setSearch] = useState(true);
-    const [data, setData] = useState<Task[]>([]);
+    const [data, setData] = useState<Faq[]>([]);
 
     const searchParams = new URLSearchParams(
         typeof window === "undefined" ? "" : window.location.search
     );
 
-    const [taskEdit, setTaskEdit] = useState<DataTasksType>({
+    const [dataEdit, setDataEdit] = useState<DataFaqType>({
         id: "",
         title: "",
         description: "",
+        keywords: "",
         isPublic: false,
     });
     const [typeSubmit, setTypeSubmit] = useState<TypeSubmitCrud>("new");
@@ -70,7 +72,7 @@ export default function App() {
                 return false;
             }
             try {
-                const response = await axios.get(`/tasks?search=${searchText}`);
+                const response = await axios.get(`/faq?search=${searchText}`);
                 setData(response.data);
             } catch (error) {
                 console.error(error);
@@ -94,25 +96,26 @@ export default function App() {
 
     async function openModalCrud(
         type: TypeSubmitCrud,
-        data: DataTasksType = {
+        data: DataFaqType = {
             id: "",
             title: "",
             description: "",
             isPublic: false,
+            keywords: "",
         }
     ) {
         // abre o modal com os dados
         setTypeSubmit(type);
-        setTaskEdit(data);
+        setDataEdit(data);
         setIsOpenModal(true);
     }
 
     return (
         <>
             <CrudModal
-                endPoint="/tasks"
+                endPoint="/faq"
                 typeSubmit={typeSubmit}
-                data={taskEdit}
+                data={dataEdit}
                 setIsOpen={setIsOpenModal}
                 isOpen={isOpenModal}
                 handleFinally={() => {
@@ -126,13 +129,13 @@ export default function App() {
                         required
                         placeholder="título do registro..."
                         onChange={(e) =>
-                            setTaskEdit({
-                                ...taskEdit,
+                            setDataEdit({
+                                ...dataEdit,
                                 title: String(e.target.value),
                             })
                         }
                         className="input input-primary"
-                        value={String(taskEdit?.title)}
+                        value={String(dataEdit?.title)}
                     />
                     <div className="h-2"></div>
                     <textarea // description
@@ -142,23 +145,23 @@ export default function App() {
                         required
                         placeholder="descrição do registro..."
                         onChange={(e) =>
-                            setTaskEdit({
-                                ...taskEdit,
+                            setDataEdit({
+                                ...dataEdit,
                                 description: String(e.target.value),
                             })
                         }
-                        value={String(taskEdit.description)}
+                        value={String(dataEdit.description)}
                     />
                     <div className="h-4"></div>
                     <div className="flex items-center gap-2 text-sm ">
                         <input
                             type="checkbox"
                             className="input input-primary checkbox"
-                            defaultChecked={taskEdit.isPublic}
+                            defaultChecked={dataEdit.isPublic}
                             onChange={(e) =>
-                                setTaskEdit({
-                                    ...taskEdit,
-                                    isPublic: Boolean(!taskEdit.isPublic),
+                                setDataEdit({
+                                    ...dataEdit,
+                                    isPublic: Boolean(!dataEdit.isPublic),
                                 })
                             }
                         />
@@ -203,7 +206,7 @@ export default function App() {
                     {data.length > 0 && (
                         <div className="flex justify-end w-full mb-3 text-sm">
                             <Link
-                                href={`${searchParams}/api/public/tasks?key=${session?.user.id}&search=`}
+                                href={`${searchParams}/api/public/faq?key=${session?.user.id}&per_page=3&search=`}
                                 passHref
                             >
                                 <a target="_blank" className="hover:underline">
@@ -213,7 +216,7 @@ export default function App() {
                         </div>
                     )}
                     {data &&
-                        data.map((task, index) => (
+                        data.map((faq, index) => (
                             <div key={index}>
                                 <div className="justify-center rounded-lg dark:bg-slate-800 bg-slate-200 ">
                                     <div>
@@ -221,10 +224,10 @@ export default function App() {
                                             <input
                                                 disabled
                                                 className="input input-primary"
-                                                value={task.title}
+                                                value={faq.title}
                                             />
                                             <div className="flex items-center justify-center w-10 h-auto text-gray-500 bg-transparent">
-                                                {task.isPublic ? (
+                                                {faq.isPublic ? (
                                                     <MdOutlinePublic title="público" />
                                                 ) : (
                                                     <RiGitRepositoryPrivateLine title="privado" />
@@ -235,13 +238,13 @@ export default function App() {
                                             cols={1}
                                             disabled
                                             className="border-0 input input-primary"
-                                            value={task.description ?? ""}
+                                            value={faq.description ?? ""}
                                         ></textarea>
                                     </div>
 
                                     <div className="flex justify-between p-2 mb-2 text-base ">
                                         <span className="text-xs opacity-50">
-                                            {task.createdAt &&
+                                            {faq.createdAt &&
                                                 new Intl.DateTimeFormat(
                                                     "pt-BR",
                                                     {
@@ -249,7 +252,7 @@ export default function App() {
                                                         timeStyle: "short",
                                                     }
                                                 ).format(
-                                                    new Date(task.createdAt)
+                                                    new Date(faq.createdAt)
                                                 )}
                                         </span>
 
@@ -259,7 +262,7 @@ export default function App() {
                                                 className="border-0 hover:text-green-500 btn btn-mini btn-default"
                                                 onClick={() =>
                                                     handleCopyText(
-                                                        String(task.description)
+                                                        String(faq.description)
                                                     )
                                                 }
                                             >
@@ -270,7 +273,7 @@ export default function App() {
                                                 title="Alterar"
                                                 className="border-0 hover:text-blue-500 btn btn-mini btn-default"
                                                 onClick={() =>
-                                                    openModalCrud("edit", task)
+                                                    openModalCrud("edit", faq)
                                                 }
                                             >
                                                 <AiFillEdit className="text-xl" />
@@ -280,10 +283,7 @@ export default function App() {
                                                 title="Deletar"
                                                 className="border-0 hover:text-red-500 btn btn-mini btn-default"
                                                 onClick={() =>
-                                                    openModalCrud(
-                                                        "delete",
-                                                        task
-                                                    )
+                                                    openModalCrud("delete", faq)
                                                 }
                                             >
                                                 <FaTrash className="text-sm" />

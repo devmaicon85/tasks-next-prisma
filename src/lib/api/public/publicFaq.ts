@@ -1,11 +1,9 @@
 import prismaClient from "@/lib/prismaClient";
-
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession, Session } from "next-auth";
 
-export async function publicTasks(req: NextApiRequest, res: NextApiResponse) {
+export async function publicFaq(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { search, key } = req.query;
+        const { search, key, per_page } = req.query;
 
         if (Array.isArray(search)) {
             return res.status(400).end("Busca inválida");
@@ -15,10 +13,10 @@ export async function publicTasks(req: NextApiRequest, res: NextApiResponse) {
             return res.status(400).end("Key inválido");
         }
 
-        const data = await prismaClient.task.findMany({
+        const data = await prismaClient.faq.findMany({
             where: {
                 userId: key,
-                isPublic: true, // SOMENTE TASKS PUBLICAS
+                isPublic: true, // SOMENTE FAQ PUBLICAS
                 OR: [
                     {
                         title: {
@@ -26,7 +24,7 @@ export async function publicTasks(req: NextApiRequest, res: NextApiResponse) {
                         },
                     },
                     {
-                        description: {
+                        keywords: {
                             contains: search.replace(" ", "%"),
                         },
                     },
@@ -38,6 +36,10 @@ export async function publicTasks(req: NextApiRequest, res: NextApiResponse) {
                 createdAt: true,
                 updatedAt: true,
             },
+
+            skip: 0,
+            take: Number(per_page ?? 2),
+
             orderBy: { createdAt: "desc" },
         });
         return res.status(200).json(data);

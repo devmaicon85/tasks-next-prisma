@@ -1,14 +1,13 @@
+import { findAll, remove, updateOrCreate } from "@/lib/api/faq";
 import { HttpMethod } from "@/types/http";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-
 import { getToken } from "next-auth/jwt";
-const secret = process.env.NEXTAUTH_SECRET;
-
-import { updateCreateTask, deleteTask, searchTasks } from "@/lib/api/tasks";
 import { authOptions } from "./auth/[...nextauth]";
 
-export default async function tasks(req: NextApiRequest, res: NextApiResponse) {
+const secret = process.env.NEXTAUTH_SECRET;
+
+export default async function faq(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession({ req, res }, authOptions);
     if (!session) return res.status(401).end();
 
@@ -22,13 +21,13 @@ export default async function tasks(req: NextApiRequest, res: NextApiResponse) {
 
     switch (req.method) {
         case HttpMethod.POST:
-            return await updateCreateTask(req, res, session);
+            return await updateOrCreate(req, res, session);
         case HttpMethod.DELETE:
-            return await deleteTask(req, res, session);
+            return await remove(req, res, session);
         case HttpMethod.GET:
-            return await searchTasks(req, res, session);
+            return await findAll(req, res, session);
         case HttpMethod.PUT:
-            return await updateCreateTask(req, res, session);
+            return await updateOrCreate(req, res, session);
 
         default:
             res.setHeader("Allow", [
