@@ -221,7 +221,7 @@ export default function App() {
                     {data &&
                         data.map((faq, index) => (
                             <div key={index}>
-                                <div className="justify-center rounded-lg dark:bg-slate-800 bg-slate-200 ">
+                                <div className="justify-center font- rounded-lg dark:bg-slate-800 bg-slate-200 ">
                                     <div>
                                         <div className="flex ">
                                             <input
