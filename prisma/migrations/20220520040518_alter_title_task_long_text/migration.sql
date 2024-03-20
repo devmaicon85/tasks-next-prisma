@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `Task` MODIFY `title` LONGTEXT NOT NULL;
