@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { InputAndButton } from "@/components/InputAndButton";
 import { CrudModal, TypeSubmitCrud } from "@/components/modals/CrudModal";
 import { Faq } from "@prisma/client";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -16,21 +16,22 @@ import { FaTrash } from "react-icons/fa";
 import { MdOutlineManageSearch, MdOutlinePublic } from "react-icons/md";
 import { RiGitRepositoryPrivateLine } from "react-icons/ri";
 import axios from "../../lib/axios";
+import { GetServerSideProps } from "next";
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//     // const session = await getSession({ req: context.req });
-//     // if (!session) {
-//     //     return {
-//     //         redirect: {
-//     //             destination: "/login",
-//     //             permanent: false,
-//     //         },
-//     //     };
-//     // }
-//     // return {
-//     //     props: { session },
-//     // };
-// };
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getSession({ req: context.req });
+    if (!session) {
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false,
+            },
+        };
+    }
+    return {
+        props: { session },
+    };
+};
 
 export type DataFaqType = {
     id: string | null;
