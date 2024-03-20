@@ -20,12 +20,14 @@ export async function publicFaq(req: NextApiRequest, res: NextApiResponse) {
                 OR: [
                     {
                         title: {
-                            contains: search.replace(" ", "%"),
+                            contains: search?.replace(" ", "%"),
+                            mode: "insensitive",
                         },
                     },
                     {
                         keywords: {
-                            contains: search.replace(" ", "%"),
+                            contains: search?.replace(" ", "%"),
+                            mode: "insensitive",
                         },
                     },
                 ],

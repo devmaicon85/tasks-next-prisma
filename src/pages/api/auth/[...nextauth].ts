@@ -23,8 +23,8 @@ export const authOptions = {
             clientSecret: String(process.env.GOOGLE_SECRET),
         }),
         GitProvider({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET,
+            clientId: process.env.GITHUB_ID as string,
+            clientSecret: process.env.GITHUB_SECRET as string,
             // profile(profile) {
             //     return {
             //         id: profile.id.toString(),
