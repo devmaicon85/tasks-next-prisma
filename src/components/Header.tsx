@@ -1,5 +1,4 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +7,8 @@ import { Fragment, useState } from "react";
 import imageLogoUrl from "../../public/assets/logo.png";
 import { UserPasswordModal } from "./modals/UserPasswordModal";
 import { ThemeButton } from "./ThemeButton";
+import { MdClose, MdMenu } from "react-icons/md";
+import { HiBell } from "react-icons/hi";
 
 const navigation = [
     { name: "Home", href: "/admin" },
@@ -31,7 +32,7 @@ export function Header() {
             {({ open }) => (
                 <>
                     <UserPasswordModal
-                        handleFinally={() => {}}
+                        handleFinally={() => { }}
                         setIsOpen={setIsOpenModalPassword}
                         isOpen={isOpenModalPassword}
                     />
@@ -44,12 +45,12 @@ export function Header() {
                                         Open main menu
                                     </span>
                                     {open ? (
-                                        <XIcon
+                                        <MdClose
                                             className="block w-6 h-6"
                                             aria-hidden="true"
                                         />
                                     ) : (
-                                        <MenuIcon
+                                        <MdMenu
                                             className="block w-6 h-6"
                                             aria-hidden="true"
                                         />
@@ -72,21 +73,19 @@ export function Header() {
                                                 href={item.href}
                                                 passHref
                                                 key={item.name}
-                                            >
-                                                <a
-                                                    className={`
-                                                      ${
-                                                          router.asPath ===
-                                                          item.href
-                                                              ? "bg-gray-900 text-white"
-                                                              : "text-gray-300 hover:bg-gray-700"
-                                                      } hover:text-white 
+                                                className={`
+                                                      ${router.asPath ===
+                                                        item.href
+                                                        ? "bg-gray-900 text-white"
+                                                        : "text-gray-300 hover:bg-gray-700"
+                                                    } hover:text-white 
                                                             px-3 py-2 rounded-md text-sm font-medium"
                                                       
                                                       `}
-                                                >
-                                                    {item.name}
-                                                </a>
+                                            >
+
+                                                {item.name}
+
                                             </Link>
                                         ))}
                                     </div>
@@ -100,7 +99,7 @@ export function Header() {
                                     <span className="sr-only">
                                         View notifications
                                     </span>
-                                    <BellIcon
+                                    <HiBell
                                         className="w-6 h-6"
                                         aria-hidden="true"
                                     />
@@ -138,11 +137,10 @@ export function Header() {
                                             <Menu.Item>
                                                 {({ active }) => (
                                                     <a
-                                                        className={`${
-                                                            active
-                                                                ? "bg-gray-100"
-                                                                : ""
-                                                        }
+                                                        className={`${active
+                                                            ? "bg-gray-100"
+                                                            : ""
+                                                            }
                                                             block px-4 py-2 text-sm text-gray-700`}
                                                     >
                                                         Meu Perfil (
@@ -152,41 +150,34 @@ export function Header() {
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <Link href="" passHref>
-                                                        <a
-                                                            onClick={() =>
-                                                                setIsOpenModalPassword(
-                                                                    true
-                                                                )
+                                                    <Link href="" onClick={() =>
+                                                        setIsOpenModalPassword(
+                                                            true
+                                                        )
+                                                    }
+                                                        className={`
+                                                    ${active
+                                                                ? "bg-gray-100"
+                                                                : ""
                                                             }
-                                                            className={`
-                                                            ${
-                                                                active
-                                                                    ? "bg-gray-100"
-                                                                    : ""
-                                                            }
-                                                            block px-4 py-2 text-sm text-gray-700`}
-                                                        >
-                                                            Alterar Senha
-                                                        </a>
+                                                    block px-4 py-2 text-sm text-gray-700`}>
+
+                                                        Alterar Senha
+
                                                     </Link>
                                                 )}
                                             </Menu.Item>
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <Link href="" passHref>
-                                                        <a
-                                                            onClick={Logoff}
-                                                            className={`
-                                                            ${
-                                                                active
-                                                                    ? "bg-gray-100"
-                                                                    : ""
+                                                    <Link href={""} onClick={Logoff}
+                                                        className={`
+                                                    ${active
+                                                                ? "bg-gray-100"
+                                                                : ""
                                                             }
-                                                            block px-4 py-2 text-sm text-gray-700`}
-                                                        >
-                                                            Sair
-                                                        </a>
+                                                    block px-4 py-2 text-sm text-gray-700`}>
+
+                                                        Sair
                                                     </Link>
                                                 )}
                                             </Menu.Item>
@@ -200,18 +191,15 @@ export function Header() {
                     <Disclosure.Panel className="sm:hidden">
                         <div className="px-2 pt-2 pb-3 space-y-1">
                             {navigation.map((item) => (
-                                <Link href={item.href} passHref key={item.name}>
-                                    <a
+                                <Link href={item.href} passHref key={item.name}
                                         className={`
-                                        ${
-                                            router.asPath === item.href
+                                        ${router.asPath === item.href
                                                 ? "bg-gray-900 text-white"
                                                 : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                                        }
+                                            }
                                         block px-3 py-2 rounded-md text-base font-medium`}
                                     >
                                         {item.name}
-                                    </a>
                                 </Link>
                             ))}
                         </div>

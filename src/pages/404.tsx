@@ -276,8 +276,7 @@ export default function Erro404() {
                             </div>
                             <ThemeButton />
                         </div>
-                        <Link href="/">
-                            <a className="btn-link">Voltar pra Home</a>
+                        <Link href="/" className="btn-link">Voltar pra Home
                         </Link>
                     </div>
                 </div>

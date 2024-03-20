@@ -30,13 +30,10 @@ export default function Home() {
                         <ThemeButton className="mb-6" />
                     </div>
                     <div className="flex justify-end">
-                        <Link href="/login">
-                            <a
-                                onClick={() => setLoading(true)}
+                        <Link href="/login" onClick={() => setLoading(true)}
                                 className="text-base duration-1000 ease-out hover:scale-125"
                             >
                                 {loading ? "Carregando..." : "Acessar"}
-                            </a>
                         </Link>
                     </div>
                 </div>

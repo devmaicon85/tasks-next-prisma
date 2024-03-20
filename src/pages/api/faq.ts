@@ -8,7 +8,8 @@ import { authOptions } from "./auth/[...nextauth]";
 const secret = process.env.NEXTAUTH_SECRET;
 
 export default async function faq(req: NextApiRequest, res: NextApiResponse) {
-    const session = await getServerSession({ req, res }, authOptions);
+    const session = await getServerSession(req, res , authOptions);
+    // const session = await getServerSession({ req, res }, authOptions);
     if (!session) return res.status(401).end();
 
     if (!session.user.id)

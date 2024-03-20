@@ -25,12 +25,14 @@ export async function findAll(
                 OR: [
                     {
                         title: {
-                            contains: search.replace(" ", "%"),
+                            contains: search?.replace(" ", "%"),
+                            mode: "insensitive",
                         },
                     },
                     {
                         keywords: {
-                            contains: search.replace(" ", "%"),
+                            contains: search?.replace(" ", "%"),
+                            mode: "insensitive",
                         },
                     },
                 ],

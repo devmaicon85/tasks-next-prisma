@@ -41,11 +41,8 @@ export default function Integration() {
                 <div>
                     <Link
                         href={`/api/public/faq?key=${session?.user.id}&per_page=3&search=`}
-                        passHref
-                    >
-                        <a target="_blank" className="hover:underline">
-                            Clique aqui para acessar o link da Api de Integração
-                        </a>
+                        passHref target="_blank" className="hover:underline">
+                        Clique aqui para acessar o link da Api de Integração
                     </Link>
 
                     <div className="mt-4 text-sm">
